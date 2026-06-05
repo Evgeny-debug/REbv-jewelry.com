@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    
+    <script>
+        (function initThemeBeforePaint() {
+            try {
+                const savedTheme = JSON.parse(localStorage.getItem('bv_theme'));
+                const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <title>BV Jewelry | Каталог</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+
+<body class="mobile-padding antialiased selection:bg-[#c5a059] selection:text-white pb-[60px] md:pb-0">
+
+    <main id="home" class="pt-[60px] md:pt-[70px]"> 
+        <section class="w-full relative" id="promo-banner-top">
+            <div id="mainBannerContainer" class="w-full relative min-h-[300px] md:min-h-[500px] bg-gray-100 dark:bg-gray-900">
+                </div>
+        </section>
+
+        <section class="max-w-[1920px] mx-auto px-4 md:px-8 py-10 md:py-16">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="hero-title text-[var(--text-main)] text-[28px] md:text-[36px]" data-i18n="m2">Каталог</h2>
+            </div>
+            <div id="homeCategoriesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6"></div>
+        </section>
+
+        <div id="dynamicHomeBlocksContainer"></div>
+        
+        <section id="homeSeoBlock" class="max-w-4xl mx-auto px-6 py-12 text-center empty:hidden"></section>
+    </main>
+
+    <script src="assets/js/api/demo-data.js"></script>
+    <script type="module" src="assets/js/main.js?v=13"></script>
+</body>
+</html>

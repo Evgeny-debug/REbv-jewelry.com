@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>BV Jewelry | Панель Керування</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        
+        /* 16px font-size строго обязателен для мобильных инпутов, иначе iOS будет зумить страницу при клике */
+        .admin-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: all 0.2s; font-size: 16px; background: #fff;}
+        .admin-input:focus { border-color: #c5a059; box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2); }
+        
+        /* Удобный скроллбар */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Поддержка безопасной зоны внизу для iPhone (полоска "Домой") */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="flex h-screen w-screen overflow-hidden text-gray-800 bg-[#f3f4f6]">
+
+    <aside class="hidden md:flex flex-col w-64 bg-gray-900 text-white shrink-0 border-r border-gray-800">
+        <div class="p-6 border-b border-gray-800 flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-[#c5a059] flex items-center justify-center font-bold text-white">BV</div>
+            <div>
+                <h1 class="font-bold tracking-wider text-sm">ADMIN PANEL</h1>
+                <span class="text-xs text-gray-400">v1.0</span>
+            </div>
+        </div>
+        
+        <nav class="flex-1 p-4 flex flex-col gap-2">
+            <button class="flex items-center gap-3 w-full p-3 bg-gray-800 text-[#c5a059] rounded-lg font-medium transition-colors">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Налаштування</span>
+            </button>
+            <button class="flex items-center gap-3 w-full p-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors opacity-50 cursor-not-allowed">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span>Каталог</span>
+            </button>
+            <button class="flex items-center gap-3 w-full p-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors opacity-50 cursor-not-allowed">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                <span>Замовлення</span>
+            </button>
+        </nav>
+        
+        <div class="p-4 border-t border-gray-800">
+            <a href="index.html" class="flex items-center justify-center gap-2 w-full p-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors text-white font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Вийти на сайт
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 h-full relative">
+        
+        <header class="shrink-0 bg-white border-b border-gray-200 px-4 md:px-8 h-16 md:h-20 flex justify-between items-center z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-[#c5a059] flex items-center justify-center font-bold text-white md:hidden">BV</div>
+                <h2 class="text-lg md:text-xl font-semibold text-gray-800 truncate">Налаштування</h2>
+            </div>
+            
+            <button form="settingsForm" type="submit" class="bg-[#c5a059] hover:bg-[#b08d4a] active:scale-95 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm md:text-base font-medium shadow-md transition-all flex items-center gap-2">
+                <svg class="w-5 h-5 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                <span>Зберегти</span>
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar pb-24 md:pb-8">
+            <div class="max-w-4xl mx-auto">
+                <form id="settingsForm" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 md:p-8 space-y-6 md:space-y-8">
+                    
+                    <div>
+                        <h3 class="text-base md:text-lg font-semibold text-gray-900 border-b pb-2 mb-4">Контактна інформація</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Номер телефону</label>
+                                <input type="text" name="phone" class="admin-input" placeholder="+38 0XX XXX XX XX">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Графік роботи</label>
+                                <input type="text" name="schedule" class="admin-input" placeholder="08:00 - 18:00">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Фізична адреса магазину</label>
+                                <input type="text" name="address" class="admin-input" placeholder="м. Ізмаїл, вул. Торгова, 68">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-base md:text-lg font-semibold text-gray-900 border-b pb-2 mb-3">Соціальні мережі</h3>
+                        <p class="text-xs md:text-sm text-gray-500 mb-4">Якщо залишити поле порожнім, іконка зникне з сайту.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Посилання на Instagram</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                    </span>
+                                    <input type="url" name="instLink" class="admin-input pl-11" placeholder="https://instagram.com/...">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Посилання на Telegram</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                    </span>
+                                    <input type="url" name="tgLink" class="admin-input pl-11" placeholder="https://t.me/...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3. НИЖНИЙ НАВИГАЦИОННЫЙ БАР (Скроллируемый) -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-40 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] pb-safe">
+        <!-- Контейнер со скроллом -->
+        <div class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+            
+            <!-- Кнопка 1 -->
+            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-[#c5a059] border-t-2 border-[#c5a059]">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Налаштування</span>
+            </button>
+
+            <!-- Кнопка 2 -->
+            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Каталог</span>
+            </button>
+
+            <!-- Кнопка 3 -->
+            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Замовлення</span>
+            </button>
+
+            <!-- Кнопка 4 -->
+            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800" onclick="window.location.href='index.html'">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">На сайт</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Скрываем скроллбар (добавь этот класс в <style> или прямо в head) -->
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+
+    <div id="toast" class="fixed bottom-[85px] md:bottom-5 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-5 bg-gray-900 text-white px-5 py-3 md:px-6 md:py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 pointer-events-none z-[100] w-[90%] md:w-auto">
+        <svg class="w-6 h-6 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+        <span class="font-medium text-sm md:text-base">Налаштування успішно збережено!</span>
+    </div>
+
+    <script type="module" src="assets/js/admin.js?v=3"></script>
+</body>
+</html>

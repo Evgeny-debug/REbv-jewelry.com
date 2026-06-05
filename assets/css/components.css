@@ -1,0 +1,47 @@
+/* Жесткий каркас корзины с Dynamic Viewport Height */
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 440px;
+    height: 100dvh; /* КЛЮЧЕВОЙ ФИКС! Динамическая высота окна */
+    background: color-mix(in srgb, var(--bg-card) 85%, transparent);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-strong);
+    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 5501;
+    display: flex;
+    flex-direction: column; /* Каркас для гибкого тела и жесткого футера */
+}
+
+.cart-drawer.active {
+    right: 0;
+}
+
+.cart-header {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid var(--border);
+}
+
+.cart-body {
+    flex: 1 1 auto; /* Растягивается на все доступное место */
+    overflow-y: auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-footer {
+    flex: 0 0 auto; /* Жестко прибито к низу */
+    padding: 24px 30px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)); /* Учет челки/шторки iPhone */
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-card) 95%, transparent);
+}
