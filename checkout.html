@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    
+    <script>
+        (function initThemeBeforePaint() {
+            try {
+                const savedTheme = JSON.parse(localStorage.getItem('bv_theme'));
+                const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+
+    <title>Оформлення замовлення | BV Jewelry</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .input-field { width: 100%; background: color-mix(in srgb, var(--bg-card) 50%, transparent); border: 1px solid var(--border); border-radius: 8px; padding: 14px; color: var(--text-main); outline: none; transition: border-color 0.3s; font-size: 14px; font-family: 'Inter'; }
+        .input-field:focus { border-color: var(--gold-muted); }
+        select.input-field option { background-color: var(--bg-card); color: var(--text-main); }
+        
+        /* Стили для дропдаунов Новой Почты */
+        .np-dropdown-item { padding: 12px 14px; color: var(--text-main); font-size: 13px; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid var(--border); }
+        .np-dropdown-item:hover { background: color-mix(in srgb, var(--gold-muted) 10%, transparent); color: var(--gold-muted); }
+        .np-dropdown-item:last-child { border-bottom: none; }
+        .np-dropdown { border: 1px solid color-mix(in srgb, var(--gold-muted) 30%, transparent); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 pb-20 bg-[var(--bg-body)]">
+
+    <a href="index.html" class="absolute top-6 left-6 text-sm text-[var(--text-muted)] hover:text-[var(--gold-muted)] flex items-center gap-2 transition-colors z-10">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span class="hidden md:inline">Повернутися до покупок</span>
+    </a>
+
+    <div class="w-full max-w-5xl flex flex-col lg:flex-row gap-8 mt-16 lg:mt-0" id="checkoutContainer">
+        
+        <div class="w-full lg:w-5/12 glass-panel bg-[var(--bg-card)] border border-[var(--border)] rounded-[24px] p-6 shadow-2xl flex flex-col max-h-[85vh]">
+            <h2 class="text-xl font-serif text-[var(--gold-muted)] italic mb-6">Ваше замовлення</h2>
+            <div id="checkoutItemsList" class="flex-grow overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-4">
+                </div>
+            
+            <div class="mt-6 pt-6 border-t border-[var(--border)] flex justify-between items-end">
+                <span class="text-xs uppercase tracking-widest text-[var(--text-muted)]">Підсумок:</span>
+                <span class="text-2xl font-bold text-[var(--text-main)]" id="checkoutTotal">0 ₴</span>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-7/12 glass-panel bg-[var(--bg-card)] border border-[var(--border)] rounded-[24px] p-6 md:p-10 shadow-2xl flex flex-col">
+            <div class="mb-8">
+                <h1 class="text-2xl md:text-3xl font-serif text-[var(--text-main)] mb-2">Оформлення замовлення</h1>
+                <p class="text-sm text-[var(--text-muted)]">Заповніть дані для доставки вашої прикраси</p>
+            </div>
+
+            <form id="checkoutForm" class="flex flex-col gap-6" autocomplete="off">
+                
+                <div>
+                    <h3 class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-3 ml-1">Контактні дані</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="orderName" placeholder="Ваше Ім'я та Прізвище" class="input-field" required>
+                        <input type="tel" id="orderPhone" placeholder="+38 (000) 000-00-00" class="input-field" required>
+                        <input type="email" id="orderEmail" placeholder="Email (для чеку)" class="input-field md:col-span-2" required>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-[var(--border)]">
+                    <h3 class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-3 ml-1 flex justify-between items-center">
+                        Доставка (Нова Пошта)
+                        <img src="https://novaposhta.ua/runtime/cache/320x95/np-logo-uk_1.png" alt="NP" class="h-3 opacity-80 rounded" style="filter: grayscale(1) invert(1) brightness(2);">
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <input type="text" id="orderCity" placeholder="Почніть вводити місто..." class="input-field" autocomplete="new-password" required>
+                            <input type="hidden" id="orderCityRef" value="">
+                            <div id="cityDropdown" class="absolute w-full mt-1 bg-[var(--bg-elevated)] np-dropdown rounded-lg shadow-2xl z-50 hidden max-h-48 overflow-y-auto custom-scrollbar border border-[var(--border)]"></div>
+                        </div>
+
+                        <div class="relative">
+                            <input type="text" id="orderBranch" placeholder="Оберіть місто спочатку" class="input-field disabled:opacity-40 disabled:cursor-not-allowed" disabled autocomplete="new-password" required>
+                            <div id="branchDropdown" class="absolute w-full mt-1 bg-[var(--bg-elevated)] np-dropdown rounded-lg shadow-2xl z-50 hidden max-h-48 overflow-y-auto custom-scrollbar border border-[var(--border)]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-[var(--border)]">
+                    <h3 class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-3 ml-1">Спосіб оплати</h3>
+                    <select id="orderPayment" class="input-field cursor-pointer">
+                        <option value="cod">Накладений платіж (Оплата при отриманні)</option>
+                        <option value="card">Онлайн оплата (Карткою / Apple Pay)</option>
+                    </select>
+                </div>
+
+                <div class="pt-4 border-t border-[var(--border)]">
+                    <h3 class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-3 ml-1">Коментар до замовлення</h3>
+                    <textarea id="orderComment" placeholder="Побажання щодо пакування тощо..." class="input-field h-16 resize-none"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-[var(--text-main)] text-[var(--bg-body)] font-bold uppercase tracking-widest text-xs px-10 py-4 rounded-lg hover:bg-[var(--gold-muted)] hover:text-[#111] transition-all active:scale-95 mt-2 shadow-lg">
+                    Підтвердити замовлення
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="successModal" class="hidden fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-4 opacity-0 transition-opacity duration-500">
+        <div class="glass-panel p-8 md:p-12 text-center max-w-md w-full border-[var(--gold-muted)]/30 bg-[var(--bg-card)] rounded-[24px] shadow-2xl">
+            <div class="w-20 h-20 mx-auto bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-6">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h2 class="text-2xl font-serif text-[var(--gold-muted)] italic mb-3">Дякуємо!</h2>
+            <p class="text-sm text-[var(--text-muted)] mb-8 leading-relaxed">Ваше замовлення успішно прийнято. Наш менеджер зв'яжеться з вами найближчим часом.</p>
+            
+            <div id="guestPromo" class="bg-[var(--bg-elevated)] border border-[var(--border)] rounded-xl p-5 mb-8">
+                <p class="text-xs text-[var(--text-muted)] mb-3">Відстежуйте статус замовлень та отримуйте знижки</p>
+                <button onclick="window.location.href='index.html'" class="text-[var(--gold-muted)] text-xs font-bold uppercase tracking-widest hover:underline">Створити акаунт</button>
+            </div>
+
+            <a href="index.html" class="block w-full border border-[var(--border)] text-[var(--text-main)] text-xs font-bold uppercase tracking-widest py-3 rounded-lg hover:bg-[var(--bg-elevated)] transition-colors">На головну</a>
+        </div>
+    </div>
+
+    <script src="js/demo-data.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/core/ui.js"></script>
+    <script src="js/core/init.js"></script>
+    <script src="js/pages/checkout.js"></script>
+
+</body>
+</html>

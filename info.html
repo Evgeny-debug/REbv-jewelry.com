@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f3e8e8" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    
+    <script>
+        (function initThemeBeforePaint() {
+            try {
+                const savedTheme = JSON.parse(localStorage.getItem('bv_theme'));
+                const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <title>Інформація | BV Jewelry</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .info-nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 0;
+            color: var(--text-muted);
+        }
+        .info-nav-link:hover, .info-nav-link.active {
+            color: var(--gold-muted);
+            padding-left: 15px;
+        }
+        .info-nav-link::before {
+            content: '—';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: var(--gold-muted);
+        }
+        .info-nav-link.active::before {
+            left: 0;
+            opacity: 1;
+        }
+
+        /* Стилі для контенту, який генерується з БД */
+        .dynamic-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .dynamic-content p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        .dynamic-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 1.5rem;
+        }
+        .dynamic-content ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .dynamic-content ul li::before {
+            content: '•';
+            color: var(--gold-muted);
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+    </style>
+</head>
+<body class="mobile-padding antialiased selection:bg-[#c5a059] selection:text-white pb-[60px] md:pb-0">
+
+    <div id="auth-modal-placeholder"></div>
+    <div id="cart-sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+
+    <main class="pt-24 md:pt-36 pb-32 md:pb-20 px-4 md:px-8 w-full max-w-[1320px] mx-auto min-h-screen">
+        
+        <div class="mb-8 text-left">
+            <nav class="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-muted)] mb-4">
+                <a href="index.html" class="hover:text-[var(--gold-muted)] transition-colors">Головна</a>
+                <span class="opacity-30">/</span>
+                <span class="text-[var(--gold-muted)]">Клієнтам</span>
+            </nav>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start">
+            
+            <aside class="w-full lg:w-64 shrink-0 lg:sticky lg:top-[120px] z-10">
+                <div class="lg:hidden relative w-screen -ml-4 border-b border-[var(--border)] mb-8">
+                    <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[var(--bg-body)] to-transparent pointer-events-none z-10"></div>
+                    <div class="flex overflow-x-auto gap-6 px-4 pb-3 pt-1 no-scrollbar snap-x touch-pan-x" id="mobileInfoNav">
+                        <button onclick="window.loadPage('about')" class="info-tab-mob flex-none whitespace-nowrap text-[11px] uppercase tracking-widest font-bold pb-2 transition-colors" data-target="about">Історія Atelier</button>
+                        <button onclick="window.loadPage('warranty')" class="info-tab-mob flex-none whitespace-nowrap text-[11px] uppercase tracking-widest font-bold pb-2 transition-colors" data-target="warranty">Гарантія та Якість</button>
+                        <button onclick="window.loadPage('terms')" class="info-tab-mob flex-none whitespace-nowrap text-[11px] uppercase tracking-widest font-bold pb-2 transition-colors" data-target="terms">Умови та Доставка</button>
+                        <button onclick="window.loadPage('reviews')" class="info-tab-mob flex-none whitespace-nowrap text-[11px] uppercase tracking-widest font-bold pb-2 transition-colors" data-target="reviews">Відгуки</button>
+                    </div>
+                </div>
+
+                <div class="hidden lg:flex flex-col gap-6">
+                    <h3 class="text-[11px] uppercase tracking-[0.3em] font-bold text-[var(--gold-muted)] mb-2">Навігація</h3>
+                    <button onclick="window.loadPage('about')" class="info-nav-link text-[13px] font-bold tracking-wide uppercase" data-target="about">Історія Atelier</button>
+                    <button onclick="window.loadPage('warranty')" class="info-nav-link text-[13px] font-bold tracking-wide uppercase" data-target="warranty">Гарантія та Якість</button>
+                    <button onclick="window.loadPage('terms')" class="info-nav-link text-[13px] font-bold tracking-wide uppercase" data-target="terms">Умови та Доставка</button>
+                    <button onclick="window.loadPage('reviews')" class="info-nav-link text-[13px] font-bold tracking-wide uppercase" data-target="reviews">Відгуки</button>
+                </div>
+            </aside>
+
+            <div class="flex-1 w-full max-w-4xl">
+                <h1 id="pageTitle" class="text-4xl md:text-5xl font-serif leading-tight mb-10 text-[var(--text-main)] italic">Завантаження...</h1>
+                <div id="pageContent" class="dynamic-content">
+                    </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <button id="scrollToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-24 right-6 w-12 h-12 bg-[var(--gold-muted)] text-[#111] rounded-full flex items-center justify-center opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-[4900] shadow-[0_8px_30px_rgba(0,0,0,0.15)]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <script src="js/demo-data.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/core/ui.js"></script>
+    <script src="js/core/init.js"></script>
+    <script src="js/pages/info.js"></script>
+
+</body>
+</html>

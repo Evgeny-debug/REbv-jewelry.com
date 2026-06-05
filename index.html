@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
-    
+
     <script>
         (function initThemeBeforePaint() {
             try {
@@ -18,38 +18,119 @@
         })();
     </script>
 
-    <title>BV Jewelry | Каталог</title>
-    
+    <title>BV Jewelry | Atelier since 1984</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body class="mobile-padding antialiased selection:bg-[#c5a059] selection:text-white pb-[60px] md:pb-0">
 
-    <main id="home" class="pt-[60px] md:pt-[70px]"> 
-        <section class="w-full relative" id="promo-banner-top">
-            <div id="mainBannerContainer" class="w-full relative min-h-[300px] md:min-h-[500px] bg-gray-100 dark:bg-gray-900">
-                </div>
+    <div id="auth-modal-placeholder"></div>
+    <div id="cart-sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+
+    <main id="home">
+        
+        <section class="h-screen-hero relative flex items-center justify-center overflow-hidden hero">
+            <div class="hero-overlay absolute inset-0 bg-black/50 z-10"></div>
+            <div class="hero-bg hero-img-bg bg-black/40 absolute inset-0 z-0"></div>
+            <div class="relative z-20 flex flex-col items-center text-center px-4 hero-content">
+                <span class="hero-subtitle tracking-[0.4em] mb-2">Atelier since 1984</span>
+                <h1 class="hero-title text-[var(--bg-elevated)]">BV Jewelry</h1>
+            </div>
         </section>
 
-        <section class="max-w-[1920px] mx-auto px-4 md:px-8 py-10 md:py-16">
-            <div class="text-center mb-8 md:mb-12">
-                <h2 class="hero-title text-[var(--text-main)] text-[28px] md:text-[36px]" data-i18n="m2">Каталог</h2>
+        <section class="container-wide py-4 md:py-8" id="promo-banner-top">
+            <div id="mainBannerContainer" class="banner-slider-container min-h-[150px] md:min-h-[400px] rounded-none">
+                <div class="w-full h-full bg-gray-200/10 animate-pulse rounded-none"></div>
             </div>
-            <div id="homeCategoriesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6"></div>
+        </section>
+
+        <section class="container-wide py-4">
+            <a href="exclusive.html" class="relative block w-full h-[120px] md:h-[400px] overflow-hidden group border-y border-[var(--border)] rounded-none">
+                <img src="https://images.pexels.com/photos/28146843/pexels-photo-28146843.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-[1.5s]">
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-500"></div>
+                <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+                    <span class="text-[9px] tracking-[0.4em] uppercase text-[var(--gold-muted)] font-bold mb-1 block">Individual Order</span>
+                    <h2 class="font-serif text-2xl md:text-4xl text-white font-light tracking-[0.1em] mb-2">ЕКСКЛЮЗИВ</h2>
+                    <div class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white group-hover:text-[var(--gold-muted)] transition-colors">
+                        <span data-i18n="btn_details">Дізнатися більше</span>
+                        <span class="w-8 h-[1px] bg-[var(--gold-muted)] transition-all duration-700 group-hover:w-16"></span>
+                    </div>
+                </div>
+            </a>
         </section>
 
         <div id="dynamicHomeBlocksContainer"></div>
         
-        <section id="homeSeoBlock" class="max-w-4xl mx-auto px-6 py-12 text-center empty:hidden"></section>
+        <section class="container-wide py-8" id="categories-section">
+            <div class="text-center mb-6 md:mb-12 mt-4">
+                <h3 class="section-subtitle">Our World</h3>
+                <h2 class="section-title" data-i18n="m2">Каталог</h2>
+            </div>
+            <div class="glass-accordion-container" id="glassAccordion">
+                <div class="glass-panel-item group active rounded-none" onclick="window.toggleAccordionPanel(this)">
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800" alt="Каблучки" class="panel-bg">
+                    <div class="panel-overlay"></div>
+                    <div class="panel-content">
+                        <h3 class="panel-title">Каблучки</h3>
+                        <div class="panel-hidden-content">
+                            <a href="catalog.html#rings" class="panel-btn">Всі каблучки &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
+                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800" alt="Сережки" class="panel-bg">
+                    <div class="panel-overlay"></div>
+                    <div class="panel-content">
+                        <h3 class="panel-title">Сережки</h3>
+                        <div class="panel-hidden-content">
+                            <a href="catalog.html#earrings" class="panel-btn">Всі сережки &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800" alt="Ланцюжки" class="panel-bg">
+                    <div class="panel-overlay"></div>
+                    <div class="panel-content">
+                        <h3 class="panel-title">Ланцюжки</h3>
+                        <div class="panel-hidden-content">
+                            <a href="catalog.html#necklaces" class="panel-btn">Всі ланцюжки &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
+                    <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=800" alt="Браслети" class="panel-bg">
+                    <div class="panel-overlay"></div>
+                    <div class="panel-content">
+                        <h3 class="panel-title">Браслети</h3>
+                        <div class="panel-hidden-content">
+                            <a href="catalog.html#bracelets" class="panel-btn">Всі браслети &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <script src="assets/js/api/demo-data.js"></script>
-    <script type="module" src="assets/js/main.js?v=13"></script>
+    <div id="footer-placeholder"></div>
+
+    <button id="scrollToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-24 right-6 w-12 h-12 bg-[var(--gold-muted)] text-[#111] rounded-full flex items-center justify-center opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-[4900] shadow-[0_8px_30px_rgba(0,0,0,0.15)]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <script src="js/demo-data.js"></script>
+    
+    <script src="js/core/api.js"></script>
+    
+    <script src="js/core/ui.js"></script>
+    
+    <script src="js/core/init.js"></script>
+
 </body>
 </html>

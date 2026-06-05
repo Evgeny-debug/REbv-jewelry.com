@@ -1,170 +1,340 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BV Jewelry | Панель Керування</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BV Jewelry | Admin Panel</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        
-        /* 16px font-size строго обязателен для мобильных инпутов, иначе iOS будет зумить страницу при клике */
-        .admin-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: all 0.2s; font-size: 16px; background: #fff;}
-        .admin-input:focus { border-color: #c5a059; box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2); }
-        
-        /* Удобный скроллбар */
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        
-        /* Поддержка безопасной зоны внизу для iPhone (полоска "Домой") */
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-    </style>
-</head>
-<body class="flex h-screen w-screen overflow-hidden text-gray-800 bg-[#f3f4f6]">
+    <link rel="stylesheet" href="css/admin.css"> </head>
+<body class="h-screen overflow-hidden flex flex-col lg:flex-row relative" style="opacity: 0; transition: opacity 0.5s;">
 
-    <aside class="hidden md:flex flex-col w-64 bg-gray-900 text-white shrink-0 border-r border-gray-800">
-        <div class="p-6 border-b border-gray-800 flex items-center gap-3">
-            <div class="w-8 h-8 rounded bg-[#c5a059] flex items-center justify-center font-bold text-white">BV</div>
-            <div>
-                <h1 class="font-bold tracking-wider text-sm">ADMIN PANEL</h1>
-                <span class="text-xs text-gray-400">v1.0</span>
-            </div>
+    <div id="toastMessage" class="toast">Збережено успішно!</div>
+
+    <div class="mobile-header flex justify-between items-center p-4 glass-panel m-4 mb-0 lg:hidden z-30">
+        <h2 class="text-xl font-serif text-[#c5a059]">BV Admin</h2>
+        <button onclick="window.toggleAdminMenu()" class="text-white p-2"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="window.toggleAdminMenu()"></div>
+
+    <aside id="sidebar" class="admin-sidebar glass-panel flex flex-col h-full lg:h-[calc(100vh-32px)]">
+        <div class="p-6 border-b border-white/10 text-center hidden lg:block">
+            <h2 class="text-xl font-serif text-[#c5a059]">BV Jewelry</h2>
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Control Panel</p>
         </div>
-        
-        <nav class="flex-1 p-4 flex flex-col gap-2">
-            <button class="flex items-center gap-3 w-full p-3 bg-gray-800 text-[#c5a059] rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span>Налаштування</span>
-            </button>
-            <button class="flex items-center gap-3 w-full p-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors opacity-50 cursor-not-allowed">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span>Каталог</span>
-            </button>
-            <button class="flex items-center gap-3 w-full p-3 text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg font-medium transition-colors opacity-50 cursor-not-allowed">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                <span>Замовлення</span>
-            </button>
+        <nav class="flex-1 p-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+            <button onclick="window.switchTab('orders')" id="tab-orders" class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-white/5 text-[#c5a059] font-medium transition text-sm">🛒 Замовлення</button>
+            <button onclick="window.switchTab('products')" id="tab-products" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">📦 Товари</button>
+            <button onclick="window.switchTab('categories')" id="tab-categories" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🗂 Категорії</button>
+            <button onclick="window.switchTab('blocks')" id="tab-blocks" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🧩 Блоки Головної</button>
+            <button onclick="window.switchTab('home-visuals')" id="tab-home-visuals" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🖼 Головна (Банери)</button>
+            <button onclick="window.switchTab('exclusive')" id="tab-exclusive" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">💎 Ексклюзив</button>
+            <button onclick="window.switchTab('builder')" id="tab-builder" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🎨 Конструктор та Кольори</button>
+            <button onclick="window.switchTab('price-builder')" id="tab-price-builder" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">📋 Редактор Прайсу</button>
+            <button onclick="window.switchTab('settings')" id="tab-settings" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">⚙️ Налаштування</button>
         </nav>
-        
-        <div class="p-4 border-t border-gray-800">
-            <a href="index.html" class="flex items-center justify-center gap-2 w-full p-3 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition-colors text-white font-medium">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Вийти на сайт
-            </a>
+        <div class="p-4 border-t border-white/10 space-y-2">
+            <a href="index.html" class="block w-full text-center py-2 text-xs bg-white/5 rounded-lg text-gray-300 hover:text-[#c5a059] transition">Перейти на сайт ↗</a>
+            <button onclick="window.logout()" class="w-full py-2 text-xs text-red-400 hover:text-red-300 transition">Вийти з панелі</button>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 h-full relative">
+    <main id="mainContent" class="flex-1 p-4 overflow-y-auto h-full custom-scrollbar">
         
-        <header class="shrink-0 bg-white border-b border-gray-200 px-4 md:px-8 h-16 md:h-20 flex justify-between items-center z-10">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-[#c5a059] flex items-center justify-center font-bold text-white md:hidden">BV</div>
-                <h2 class="text-lg md:text-xl font-semibold text-gray-800 truncate">Налаштування</h2>
+        <section id="content-orders" class="tab-content h-full">
+            <h2 class="text-2xl font-semibold mb-6">Управління замовленнями</h2>
+            <div class="glass-panel p-2 md:p-0">
+                <div class="table-container border-none md:border-b md:border-white/10 rounded-b-none overflow-x-hidden md:overflow-x-auto">
+                    <table class="w-full text-left text-sm mobile-card-table">
+                        <thead class="bg-white/5 uppercase text-[10px] text-gray-400 tracking-wider">
+                            <tr>
+                                <th class="p-4">ID / Дата</th>
+                                <th class="p-4">Клієнт</th>
+                                <th class="p-4">Товари (Артикул / Розмір)</th>
+                                <th class="p-4">Сума</th>
+                                <th class="p-4">Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody" class="divide-y divide-white/5"></tbody>
+                    </table>
+                </div>
             </div>
-            
-            <button form="settingsForm" type="submit" class="bg-[#c5a059] hover:bg-[#b08d4a] active:scale-95 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm md:text-base font-medium shadow-md transition-all flex items-center gap-2">
-                <svg class="w-5 h-5 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                <span>Зберегти</span>
-            </button>
-        </header>
+        </section>
 
-        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar pb-24 md:pb-8">
-            <div class="max-w-4xl mx-auto">
-                <form id="settingsForm" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 md:p-8 space-y-6 md:space-y-8">
-                    
-                    <div>
-                        <h3 class="text-base md:text-lg font-semibold text-gray-900 border-b pb-2 mb-4">Контактна інформація</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Номер телефону</label>
-                                <input type="text" name="phone" class="admin-input" placeholder="+38 0XX XXX XX XX">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Графік роботи</label>
-                                <input type="text" name="schedule" class="admin-input" placeholder="08:00 - 18:00">
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Фізична адреса магазину</label>
-                                <input type="text" name="address" class="admin-input" placeholder="м. Ізмаїл, вул. Торгова, 68">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-base md:text-lg font-semibold text-gray-900 border-b pb-2 mb-3">Соціальні мережі</h3>
-                        <p class="text-xs md:text-sm text-gray-500 mb-4">Якщо залишити поле порожнім, іконка зникне з сайту.</p>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Посилання на Instagram</label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                                    </span>
-                                    <input type="url" name="instLink" class="admin-input pl-11" placeholder="https://instagram.com/...">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Посилання на Telegram</label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                                    </span>
-                                    <input type="url" name="tgLink" class="admin-input pl-11" placeholder="https://t.me/...">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+        <section id="content-products" class="tab-content h-full hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-semibold">Управління товарами</h2>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <input type="text" id="prodSearch" onkeyup="window.searchProducts()" placeholder="Пошук за назвою чи артикулом..." class="input-field py-2 flex-grow sm:w-64">
+                    <button onclick="window.openProductModal()" class="btn-primary whitespace-nowrap">+ Додати товар</button>
+                </div>
             </div>
-        </div>
+            <div class="glass-panel p-2 md:p-0">
+                <div class="table-container border-none md:border-b md:border-white/10 rounded-b-none overflow-x-hidden md:overflow-x-auto">
+                    <table class="w-full text-left text-sm mobile-card-table">
+                        <thead class="bg-white/5 uppercase text-[10px] text-gray-400 tracking-wider">
+                            <tr>
+                                <th class="p-4">Фото</th>
+                                <th class="p-4">Назва / Артикул</th>
+                                <th class="p-4">Категорія</th>
+                                <th class="p-4">Ціна</th>
+                                <th class="p-4">Дії</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody" class="divide-y divide-white/5"></tbody>
+                    </table>
+                </div>
+                <div class="p-4 text-sm text-gray-400 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <span id="pageInfo">Показано 0</span>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <button onclick="window.changePage(-1)" class="btn-secondary flex-1 md:flex-none" id="btnPrevPage">Попередня</button>
+                        <button onclick="window.changePage(1)" class="btn-secondary flex-1 md:flex-none" id="btnNextPage">Наступна</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="content-categories" class="tab-content hidden h-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-semibold">Структура Категорій</h2>
+                <button onclick="window.openCategoryModal()" class="btn-primary w-full sm:w-auto">+ Додати Категорію</button>
+            </div>
+            <div class="glass-panel p-6">
+                <div id="categoriesListContainer" class="flex flex-col gap-2"></div>
+            </div>
+        </section>
+
+        <section id="content-blocks" class="tab-content hidden h-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-semibold">Динамічні Блоки Головної</h2>
+                <button onclick="window.openBlockModal()" class="btn-primary w-full sm:w-auto">+ Створити Блок</button>
+            </div>
+            <div class="glass-panel p-6">
+                <p class="text-xs text-gray-400 mb-6">Створюйте скролл-блоки для головної сторінки. В карточці товару ви зможете відмітити, в якому блоці його показувати.</p>
+                <div id="blocksListContainer" class="flex flex-col gap-4"></div>
+            </div>
+        </section>
+
+        <section id="content-home-visuals" class="tab-content hidden h-full">
+            <h2 class="text-2xl font-semibold mb-6">Головна (Слайдер Банерів)</h2>
+            <div class="glass-panel p-6 mb-6">
+                <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059] mb-4">Налаштування розміру всіх банерів</h3>
+                <div class="flex flex-col sm:flex-row gap-4 items-end">
+                    <div class="w-full sm:w-1/2">
+                        <label class="text-[10px] uppercase text-gray-400 block mb-1">Глобальні Пропорції</label>
+                        <select id="set-banner-ratio" class="input-field">
+                            <option value="3/1">Панорамний (3:1) - Стандарт</option>
+                            <option value="21/9">Широкоформатний кіно (21:9)</option>
+                            <option value="16/9">Класичний екран (16:9)</option>
+                            <option value="3/2">Високий журнал (3:2)</option>
+                        </select>
+                    </div>
+                    <button onclick="window.saveSiteSettings(event)" class="btn-primary w-full sm:w-auto">Застосувати розмір</button>
+                </div>
+            </div>
+            <div class="glass-panel p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059]">Банери в ротації</h3>
+                    <button onclick="window.openBannerModal()" class="text-xs text-blue-400 hover:text-white">+ Додати Банер</button>
+                </div>
+                <div id="bannersListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </section>
+
+        <section id="content-exclusive" class="tab-content hidden h-full pb-20">
+            <h2 class="text-2xl font-semibold mb-6">Сторінка "Ексклюзив"</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059]">Етапи створення</h3>
+                        <button onclick="window.openProcessModal()" class="text-xs text-blue-400 hover:text-white transition">+ Додати етап</button>
+                    </div>
+                    <div id="exclusiveProcessList" class="flex flex-col gap-4"></div>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059]">Кнопки "Матеріали"</h3>
+                        <button onclick="window.openMaterialModal()" class="text-xs text-blue-400 hover:text-white transition">+ Додати кнопку</button>
+                    </div>
+                    <div id="exclusiveMaterialsList" class="flex flex-col gap-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="content-builder" class="tab-content hidden h-full">
+            <h2 class="text-2xl font-semibold mb-6">Конструктор Сторінок та Кольори</h2>
+            <div class="glass-panel p-6 mb-6">
+                <label class="text-[10px] uppercase text-gray-400 block mb-1">Оберіть сторінку для редагування</label>
+                <select id="builder-page-select" class="input-field" onchange="window.loadPageBuilderForm()">
+                    <option value="home_hero">Головна: Обкладинка (Hero)</option>
+                    <option value="about">Про нас (Історія Atelier)</option>
+                    <option value="warranty">Гарантія та Повернення</option>
+                    <option value="terms">Умови та Доставка</option>
+                    <option value="faq">Часті питання (FAQ)</option>
+                </select>
+            </div>
+            <div id="builder-form-container" class="glass-panel p-6"></div>
+        </section>
+
+        <section id="content-price-builder" class="tab-content hidden h-full">
+            <h2 class="text-2xl font-semibold mb-6">Редактор Прайс-листа</h2>
+            <div class="glass-panel p-6">
+                <p class="text-xs text-gray-400 mb-6">Тут ви можете змінювати категорії послуг та ціни на ремонт (формат JSON).</p>
+                <textarea id="price-json-editor" class="input-field h-[60vh] font-mono text-xs" spellcheck="false"></textarea>
+                <button onclick="window.savePriceList()" class="btn-primary mt-4">Зберегти Прайс</button>
+            </div>
+        </section>
+
+        <section id="content-settings" class="tab-content hidden h-full">
+            <h2 class="text-2xl font-semibold mb-6">Глобальні Налаштування</h2>
+            <div class="glass-panel p-6 mb-6">
+                <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059] mb-4">Курс золота (ГРН)</h3>
+                <input type="number" id="set-gold-rate" class="input-field text-lg font-bold text-[#c5a059] w-full sm:w-1/3">
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-panel p-6">
+                    <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059] mb-4">Контакти</h3>
+                    <div class="flex flex-col gap-4">
+                        <input type="text" id="set-phone" class="input-field" placeholder="Телефон">
+                        <input type="text" id="set-tg" class="input-field" placeholder="Telegram Link">
+                        <input type="text" id="set-inst" class="input-field" placeholder="Instagram Link">
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-sm font-semibold uppercase tracking-widest text-[#c5a059] mb-4">Адреси (Філіали)</h3>
+                    <div id="addressesContainer" class="flex flex-col gap-3"></div>
+                    <button type="button" onclick="window.addAddressField()" class="mt-3 text-xs text-[#c5a059] hover:underline font-bold uppercase tracking-widest">+ Додати філіал</button>
+                </div>
+            </div>
+            <div class="mt-6 text-right"><button onclick="window.saveSiteSettings(event)" class="btn-primary">Зберегти глобальні</button></div>
+        </section>
     </main>
 
-    <!-- 3. НИЖНИЙ НАВИГАЦИОННЫЙ БАР (Скроллируемый) -->
-    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-40 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] pb-safe">
-        <!-- Контейнер со скроллом -->
-        <div class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-            
-            <!-- Кнопка 1 -->
-            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-[#c5a059] border-t-2 border-[#c5a059]">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Налаштування</span>
-            </button>
-
-            <!-- Кнопка 2 -->
-            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Каталог</span>
-            </button>
-
-            <!-- Кнопка 3 -->
-            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Замовлення</span>
-            </button>
-
-            <!-- Кнопка 4 -->
-            <button class="flex-none w-[25vw] min-w-[80px] flex flex-col items-center justify-center py-3 text-gray-500 hover:text-gray-800" onclick="window.location.href='index.html'">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">На сайт</span>
-            </button>
+    <div id="productModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-0 md:p-4">
+        <div class="glass-panel p-4 md:p-6 w-full h-full md:h-auto max-w-4xl max-h-[100vh] md:max-h-[95vh] flex flex-col relative rounded-none md:rounded-2xl border-[#c5a059]/30">
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-4 shrink-0">
+                <h3 class="text-xl font-serif text-[#c5a059]" id="prodModalTitle">Редактор товару</h3>
+                <button type="button" onclick="window.closeProductModal()" class="text-gray-400 text-3xl leading-none hover:text-white">&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto pb-6 custom-scrollbar pr-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 border-b border-white/10 pb-4">
+                    <div><label class="text-[10px] uppercase font-bold text-[#c5a059] block mb-1">ID (Технічний)</label><input type="text" id="prod-id" class="input-field" disabled placeholder="Генерується автоматично"></div>
+                    <div><label class="text-[10px] uppercase font-bold text-[#c5a059] block mb-1">Артикул (SKU)</label><input type="text" id="prod-sku" class="input-field border-[#c5a059]/50" required placeholder="Напр: R-1234"></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Категорія</label><select id="prod-category" class="input-field" required></select></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Статус</label><select id="prod-status" class="input-field"><option value="in-stock">В наявності</option><option value="out-stock">Немає</option><option value="pre-order">Під замовлення</option></select></div>
+                        <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Бейдж</label><select id="prod-badge" class="input-field"><option value="none">Немає</option><option value="new">Новинка</option><option value="exclusive">Ексклюзив</option><option value="sale">Sale</option></select></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Матеріал (Спільне)</label><input type="text" id="prod-variant" class="input-field" placeholder="Напр: Золото 585"></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Каміння (Спільне)</label><input type="text" id="prod-stones" class="input-field" placeholder="Напр: Діамант 0.5ct"></div>
+                </div>
+                <div class="mb-4 bg-white/5 p-4 rounded-lg">
+                    <label class="text-[10px] uppercase tracking-widest font-bold text-[#c5a059] block mb-3 border-b border-white/10 pb-2">Показувати в блоках на Головній:</label>
+                    <div id="prod-blocks-container" class="flex flex-wrap gap-4"></div>
+                </div>
+                <div class="bg-white/5 p-4 rounded-lg border border-[#c5a059]/30">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-4">
+                        <div class="flex gap-2 overflow-x-auto no-scrollbar w-full" id="varTabsContainer"></div>
+                    </div>
+                    <div class="flex gap-2 mb-4" id="langTabsContainer">
+                        <button type="button" class="tab-lang px-4 py-1 text-xs font-bold active" onclick="window.switchLangTab('uk')">UA</button>
+                        <button type="button" class="tab-lang px-4 py-1 text-xs font-bold" onclick="window.switchLangTab('ru')">RU</button>
+                        <button type="button" class="tab-lang px-4 py-1 text-xs font-bold" onclick="window.switchLangTab('en')">EN</button>
+                    </div>
+                    <div id="variationFieldsContainer" class="flex flex-col gap-4"></div>
+                </div>
+            </div>
+            <div class="shrink-0 pt-4 mt-auto border-t border-white/10 flex gap-3 bg-[#1c1c1e]">
+                <button type="button" onclick="window.closeProductModal()" class="flex-1 btn-secondary py-3">Скасувати</button>
+                <button type="button" onclick="window.saveActiveProduct()" class="flex-1 btn-primary py-3 text-sm tracking-widest uppercase">Зберегти товар</button>
+            </div>
         </div>
-    </nav>
-
-    <!-- Скрываем скроллбар (добавь этот класс в <style> или прямо в head) -->
-    <style>
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
-
-    <div id="toast" class="fixed bottom-[85px] md:bottom-5 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-5 bg-gray-900 text-white px-5 py-3 md:px-6 md:py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 pointer-events-none z-[100] w-[90%] md:w-auto">
-        <svg class="w-6 h-6 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
-        <span class="font-medium text-sm md:text-base">Налаштування успішно збережено!</span>
     </div>
 
-    <script type="module" src="assets/js/admin.js?v=3"></script>
+    <div id="categoryModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
+        <div class="glass-panel p-6 w-full max-w-sm">
+            <h3 class="text-lg font-semibold mb-4" id="catModalTitle">Категорія</h3>
+            <form id="categoryForm" class="flex flex-col gap-4">
+                <input type="hidden" id="cat-old-id">
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">ID (Англ. без пробілів)</label><input type="text" id="cat-id" class="input-field" required pattern="[a-zA-Z0-9_-]+"></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Назва UA</label><input type="text" id="cat-name-uk" class="input-field" required></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Назва RU</label><input type="text" id="cat-name-ru" class="input-field" required></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Назва EN</label><input type="text" id="cat-name-en" class="input-field" required></div>
+                </div>
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Батьківська категорія</label><select id="cat-parent" class="input-field"><option value="">-- Коренева категорія --</option></select></div>
+                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeCategoryModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="blockModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
+        <div class="glass-panel p-6 w-full max-w-sm">
+            <h3 class="text-lg font-semibold mb-4" id="blockModalTitle">Блок на Головній</h3>
+            <form id="blockForm" class="flex flex-col gap-4">
+                <input type="hidden" id="block-old-id">
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">ID (Англ, напр: hits)</label><input type="text" id="block-id" class="input-field" required pattern="[a-zA-Z0-9_-]+"></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок UA</label><input type="text" id="block-name-uk" class="input-field" required></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок RU</label><input type="text" id="block-name-ru" class="input-field" required></div>
+                    <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок EN</label><input type="text" id="block-name-en" class="input-field" required></div>
+                </div>
+                <div class="flex items-center gap-2"><input type="checkbox" id="block-active" class="w-4 h-4 accent-[#c5a059]"><label class="text-sm">Показувати на сайті</label></div>
+                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeBlockModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="bannerModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
+        <div class="glass-panel p-6 w-full max-w-lg">
+            <h3 class="text-lg font-semibold mb-4" id="bannerModalTitle">Банер</h3>
+            <form id="bannerForm" class="flex flex-col gap-4">
+                <input type="hidden" id="banner-id"><input type="hidden" id="banner-img"> 
+                <div class="bg-white/5 p-4 rounded-lg">
+                    <label class="text-[10px] font-bold uppercase text-[#c5a059] block mb-2">Фонове зображення</label>
+                    <input type="file" accept="image/png, image/jpeg, image/webp" class="input-field file-input" onchange="window.handleImageUpload(event, 'bannerPreview', 'banner-img')">
+                    <img id="bannerPreview" class="w-full aspect-[21/9] object-cover rounded mt-2 hidden border border-white/20">
+                </div>
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Посилання (catalog.html#sale)</label><input type="text" id="banner-link" class="input-field"></div>
+                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeBannerModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="processModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
+        <div class="glass-panel p-6 w-full max-w-lg">
+            <h3 class="text-lg font-semibold mb-4" id="processModalTitle">Етап створення</h3>
+            <form id="processForm" class="flex flex-col gap-4" onsubmit="event.preventDefault(); window.saveProcessStep();">
+                <input type="hidden" id="process-id"><input type="hidden" id="process-img"> 
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Назва</label><input type="text" id="process-title" class="input-field" required></div>
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Опис</label><textarea id="process-desc" class="input-field h-24 resize-none" required></textarea></div>
+                <div class="bg-white/5 p-4 rounded-lg">
+                    <label class="text-[10px] font-bold uppercase text-[#c5a059] block mb-2">Фото етапу</label>
+                    <input type="file" accept="image/png, image/jpeg, image/webp" class="input-field file-input" onchange="window.handleImageUpload(event, 'processPreview', 'process-img')">
+                    <img id="processPreview" class="w-full aspect-[4/3] object-cover rounded mt-2 hidden border border-white/20">
+                </div>
+                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeProcessModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="materialModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
+        <div class="glass-panel p-6 w-full max-w-sm">
+            <h3 class="text-lg font-semibold mb-4" id="materialModalTitle">Кнопка матеріалу</h3>
+            <form id="materialForm" class="flex flex-col gap-4" onsubmit="event.preventDefault(); window.saveMaterialOption();">
+                <input type="hidden" id="material-old-id">
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">ID (Англ)</label><input type="text" id="material-id" class="input-field" required pattern="[a-zA-Z0-9_-]+"></div>
+                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Текст на кнопці</label><input type="text" id="material-label" class="input-field" required></div>
+                <div class="flex items-center gap-2 mt-2"><input type="checkbox" id="material-selected" class="w-4 h-4 accent-[#c5a059]"><label for="material-selected" class="text-[11px] text-gray-300">Вибрана за замовчуванням</label></div>
+                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeMaterialModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/core/api.js"></script>
+    <script src="js/pages/admin.js"></script>
 </body>
 </html>

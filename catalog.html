@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f3e8e8" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    
+    <script>
+        (function initThemeBeforePaint() {
+            try {
+                const savedTheme = JSON.parse(localStorage.getItem('bv_theme'));
+                const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <title>Каталог прикрас | BV Jewelry</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* Специфічні стилі тільки для Каталогу */
+        #sortSelect {
+            appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c7a46a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right center; background-size: 14px;
+            padding-right: 24px; border: none; background-color: transparent; color: var(--text-main);
+        }
+        #sortSelect option { background-color: var(--bg-card); color: var(--text-main); }
+        details summary::-webkit-details-marker { display: none; }
+        details summary { list-style: none; }
+        .filter-link { text-align: left; font-size: 13px; font-weight: 500; color: var(--text-main); opacity: 0.6; transition: all 0.3s ease; position: relative; padding-left: 0; display: inline-block; }
+        .filter-link:hover, .filter-link.active { opacity: 1; color: var(--gold-muted); padding-left: 10px; }
+        .filter-link::before { content: '—'; position: absolute; left: -15px; opacity: 0; transition: all 0.3s ease; }
+        .filter-link.active::before { left: 0; opacity: 1; }
+        span[data-filter] { cursor: pointer; display: inline-block; }
+        span[data-filter].active { color: var(--gold-muted) !important; font-weight: 700; }
+        .chip-filter { padding: 8px 16px; border: 1px solid var(--border); border-radius: 0; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; }
+        .chip-filter:hover, .chip-filter.active { border-color: var(--gold-muted); color: var(--gold-muted); background: color-mix(in srgb, var(--gold-muted) 5%, transparent); }
+        .chip-filter.active { background: var(--gold-muted); color: #111; }
+        #mobileFilterDrawer { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #mobileFilterDrawer.active { transform: translateY(0); }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="mobile-padding antialiased selection:bg-[#c5a059] selection:text-white">
+
+    <div id="auth-modal-placeholder"></div>
+    <div id="cart-sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+
+    <main class="pt-28 md:pt-36 pb-20 px-4 md:px-8 w-full max-w-[1440px] mx-auto min-h-screen">
+        
+        <div class="mb-10 text-left">
+            <nav class="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-muted)] mb-4">
+                <a href="index.html" class="hover:text-[var(--gold-muted)] transition-colors" data-i18n="m1">Головна</a>
+                <span class="opacity-30">/</span>
+                <span class="text-[var(--gold-muted)]" data-i18n="m2">Каталог</span>
+            </nav>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h1 id="catalogMainTitle" class="font-serif text-4xl md:text-6xl text-[var(--text-main)] italic">Колекція Atelier</h1>
+                    <p id="catalogSubTitle" class="text-[var(--text-muted)] text-sm mt-3 max-w-xl font-light">Відкрийте для себе вишуканість у кожній деталі.</p>
+                </div>
+                
+                <div class="hidden lg:flex items-center gap-4 border-b border-[var(--border)] pb-2 min-w-[200px]">
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-[var(--text-muted)]" data-i18n="cat_sort">Сортувати:</span>
+                    <select id="sortSelect" class="cursor-pointer font-medium text-[13px] outline-none bg-transparent">
+                        <option value="newest" data-i18n="cat_sort_new">Новинки</option>
+                        <option value="price-asc" data-i18n="cat_sort_cheap">Ціна: від нижчої</option>
+                        <option value="price-desc" data-i18n="cat_sort_exp">Ціна: від вищої</option>
+                        <option value="popular">Популярні</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+            
+            <aside class="hidden lg:flex flex-col w-56 xl:w-64 sticky top-32 gap-8 overflow-y-auto custom-scrollbar max-h-[calc(100vh-140px)] pb-10 pr-2">
+                <div class="filter-block">
+                    <h3 class="text-[11px] uppercase tracking-[0.3em] font-bold text-[var(--gold-muted)] mb-6" data-i18n="m2">Категорії</h3>
+                    <div id="sideFilterCategories" class="flex flex-col gap-1"></div>
+                </div>
+
+                <div class="filter-block">
+                    <h3 class="text-[11px] uppercase tracking-[0.3em] font-bold text-[var(--gold-muted)] mb-6">Колекції</h3>
+                    <div class="flex flex-col gap-3">
+                        <button class="filter-link" data-filter="new" data-i18n="badge_new">Новинки</button>
+                        <button class="filter-link" data-filter="sale" data-i18n="badge_sale">Sale</button>
+                        <button class="filter-link" data-filter="exclusive" data-i18n="badge_exclusive">Ексклюзив</button>
+                    </div>
+                </div>
+
+                <div class="filter-block">
+                    <h3 class="text-[11px] uppercase tracking-[0.3em] font-bold text-[var(--gold-muted)] mb-6" data-i18n="menu_metal">Матеріал</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="chip-filter" data-variant="золото">Золото</button>
+                        <button class="chip-filter" data-variant="срібло">Срібло</button>
+                        <button class="chip-filter" data-variant="діамант">Діаманти</button>
+                    </div>
+                </div>
+            </aside>
+
+            <button onclick="window.toggleMobileFilters()" class="floating-filter-btn lg:hidden">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                <span data-i18n="cat_filters">Фільтр</span>
+            </button>
+
+            <div class="flex-1 w-full">
+                <div id="productGrid" class="product-grid-wide"></div>
+
+                <div id="paginationContainer" class="flex justify-center items-center gap-6 mt-20 hidden">
+                    <button id="prevPageBtn" class="px-6 py-3 border border-[var(--border)] text-[var(--text-main)] hover:text-[var(--gold-muted)] hover:border-[var(--gold-muted)] transition-all text-[11px] uppercase tracking-widest font-bold disabled:opacity-20 disabled:pointer-events-none">&larr; Попередня</button>
+                    <span id="pageIndicator" class="text-xs font-medium text-[var(--text-muted)] tracking-widest">1 / 1</span>
+                    <button id="nextPageBtn" class="px-6 py-3 border border-[var(--border)] text-[var(--text-main)] hover:text-[var(--gold-muted)] hover:border-[var(--gold-muted)] transition-all text-[11px] uppercase tracking-widest font-bold disabled:opacity-20 disabled:pointer-events-none">Наступна &rarr;</button>
+                </div>
+
+                <div id="emptyState" class="hidden text-center py-32 animate-fade-in">
+                    <div class="w-20 h-20 mx-auto mb-6 text-[var(--text-muted)] opacity-20">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196 7.5 7.5 0 0010.607 10.607z" /></svg>
+                    </div>
+                    <h3 class="text-2xl font-serif italic text-[var(--text-main)] mb-2" data-i18n="cat_empty">Ми нічого не знайшли</h3>
+                    <p class="text-[var(--text-muted)] text-sm mb-8">Спробуйте змінити параметри фільтрів або запит пошуку.</p>
+                    <button onclick="window.resetFilters()" class="text-[11px] uppercase tracking-widest font-bold text-[var(--gold-muted)] border-b border-[var(--gold-muted)] pb-1 hover:opacity-70 transition-opacity" data-i18n="cat_reset">Скинути всі фільтри</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="mobileFilterOverlay" class="fixed inset-0 bg-black/60 z-[7000] hidden opacity-0 transition-opacity backdrop-blur-sm" onclick="window.toggleMobileFilters()"></div>
+    <div id="mobileFilterDrawer" class="fixed bottom-0 left-0 w-full bg-[var(--bg-card)] z-[7001] rounded-t-[20px] transform translate-y-full transition-transform duration-500 max-h-[85vh] overflow-y-auto border-t border-[var(--border)]">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8 border-b border-[var(--border)] pb-4">
+                <h3 class="font-serif text-2xl text-[var(--text-main)]" data-i18n="cat_filters">Фільтри</h3>
+                <button onclick="window.toggleMobileFilters()" class="text-3xl text-[var(--text-muted)]">&times;</button>
+            </div>
+            
+            <div class="flex flex-col gap-8">
+                <div>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-4 block" data-i18n="m2">Категорія</span>
+                    <div id="mobileFilterCategories" class="flex flex-col gap-2"></div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-4 block" data-i18n="menu_metal">Матеріал</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="chip-filter" data-variant="золото">Золото</button>
+                        <button class="chip-filter" data-variant="срібло">Срібло</button>
+                        <button class="chip-filter" data-variant="діамант">Діаманти</button>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-[var(--gold-muted)] mb-4 block" data-i18n="cat_sort">Сортувати за</span>
+                    <div class="grid grid-cols-2 gap-2" id="mobileSortOptions">
+                        <button class="chip-filter text-center justify-center w-full active" data-sort="newest" data-i18n="cat_sort_new">Новинки</button>
+                        <button class="chip-filter text-center justify-center w-full" data-sort="price-asc" data-i18n="cat_sort_cheap">Дешевші</button>
+                        <button class="chip-filter text-center justify-center w-full" data-sort="price-desc" data-i18n="cat_sort_exp">Дорожчі</button>
+                        <button class="chip-filter text-center justify-center w-full" data-sort="popular">Популярні</button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="window.toggleMobileFilters()" class="w-full bg-[var(--gold-muted)] text-[#111] font-bold py-4 rounded-none mt-10 uppercase tracking-widest text-[11px]">Застосувати</button>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <button id="scrollToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-24 right-6 w-12 h-12 bg-[var(--gold-muted)] text-[#111] rounded-full flex items-center justify-center opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-[4900] shadow-[0_8px_30px_rgba(0,0,0,0.15)]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <script src="js/demo-data.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/core/ui.js"></script>
+    <script src="js/core/init.js"></script>
+    <script src="js/pages/catalog.js"></script>
+
+</body>
+</html>

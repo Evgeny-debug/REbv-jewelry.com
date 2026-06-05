@@ -1,0 +1,78 @@
+<header id="header">
+    <div class="header-left">
+        <button class="mobile-only p-2 cursor-pointer text-[var(--text-main)]" onclick="window.toggleMobileSearch()">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" class="w-6 h-6"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        
+        <nav class="nav-left desktop-only">
+            <a href="index.html" data-i18n="m1" class="nav-link hover:text-[var(--gold-muted)] transition-colors active">Головна</a>
+            <div class="catalog-dropdown-wrapper group">
+                <button class="nav-link catalog-toggle flex items-center gap-1 cursor-pointer hover:text-[var(--gold-muted)] transition-colors" onclick="location.href='catalog.html'">
+                    <span data-i18n="m2">Каталог</span> <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <div class="mega-menu zlato-style">
+                    <div class="mega-col-1 zlato-categories" id="megaCol1"></div>
+                    <div class="mega-col-2 zlato-content" id="megaCol2"></div>
+                </div>
+            </div>
+            <a href="services.html" class="nav-link hover:text-[var(--gold-muted)] transition-colors" data-i18n="m_price">Прайс</a>
+            <a href="exclusive.html" class="exclusive-nav-btn" data-i18n="m_atelier">Ексклюзив</a>
+        </nav>
+    </div>
+
+    <a href="index.html" class="bv-logo"><span>BV</span><span>jewelry</span></a>
+
+    <div class="header-right">
+        <a href="#" target="_blank" data-setting="tg-link" class="mobile-only p-2 cursor-pointer text-[var(--text-main)]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </a>
+        
+        <div class="search-box desktop-only group mr-4">
+            <input type="search" class="search-input" data-i18n-placeholder="search_ph" placeholder="Пошук..." onkeypress="if(event.key==='Enter') window.executeSearch(this.value)">
+            <svg class="search-icon group-focus-within:stroke-[var(--gold-muted)] transition-colors" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        
+        <a href="#" data-setting="phone-link" class="header-phone-link desktop-only hover:text-[var(--gold-muted)] transition-colors">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span class="header-phone-text font-medium tracking-wide" data-setting-text="phone">Завантаження...</span>
+        </a>
+        
+        <button id="themeToggle" class="icon-btn desktop-only hover:text-[var(--gold-muted)]" onclick="toggleTheme()"><svg id="themeIcon" viewBox="0 0 24 24"></svg></button>
+        
+        <div class="dropdown-wrapper lang-dropdown desktop-only">
+            <button class="lang-current"><img src="https://flagcdn.com/ua.svg" class="flag" id="currentFlag" alt=""><span id="currentLangLabel">UA</span></button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item w-full text-left flex items-center gap-2" onclick="changeLang('uk')"><img src="https://flagcdn.com/ua.svg" class="w-5 rounded-[3px]" alt=""> UA</button>
+                <button class="dropdown-item w-full text-left flex items-center gap-2" onclick="changeLang('en')"><img src="https://flagcdn.com/gb.svg" class="w-5 rounded-[3px]" alt=""> EN</button>
+                <button class="dropdown-item w-full text-left flex items-center gap-2" onclick="changeLang('ru')"><img src="https://flagcdn.com/ru.svg" class="w-5 rounded-[3px]" alt=""> RU</button>
+            </div>
+        </div>
+        
+        <div class="dropdown-wrapper desktop-only group">
+            <button class="icon-btn" id="headerProfileBtn" onclick="window.smartProfileClick()">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </button>
+            <div class="dropdown-menu" id="profileDropdownMenu"></div>
+        </div>
+        
+        <button onclick="toggleFavDrawer()" class="icon-btn desktop-only">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span class="cart-badge fav-badge" style="background: var(--danger);">0</span>
+        </button>
+        <button onclick="toggleCart()" class="icon-btn desktop-only">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span class="cart-badge">0</span>
+        </button>
+    </div>
+    
+    <div id="mobSearchContainer" class="absolute top-[100%] left-0 w-full p-4 bg-[var(--bg-card)] border-b border-[var(--border)] shadow-xl hidden z-[4000]">
+        <div class="flex items-center bg-black/5 dark:bg-white/5 border border-[var(--border)] rounded-none px-4 py-3 focus-within:border-[var(--gold-muted)] transition-colors">
+            <input type="search" id="mobSearchOverlayInput" data-i18n-placeholder="search_ph" placeholder="Пошукаємо прикрасу?..." class="w-full bg-transparent outline-none text-[var(--text-main)] text-sm font-['Inter']">
+            <button onclick="window.executeSearch(document.getElementById('mobSearchOverlayInput').value)" class="text-[var(--gold-muted)] ml-2">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<nav class="side-menu" id="sideMenu" aria-label="Мобильная навигация"></nav>
