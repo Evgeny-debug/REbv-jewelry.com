@@ -1827,3 +1827,16 @@ aside.custom-scrollbar {
     padding-bottom: env(safe-area-inset-bottom) !important;
     background: var(--bg-card);
 }
+/* --- Сетка подвала --- */
+.footer-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 колонки на мобилках */
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(4, 1fr) !important; /* 4 колонки на планшетах и ПК */
+        gap: 1.5rem;
+    }
+}

@@ -28,8 +28,9 @@
 </nav>
 
 <footer id="footer" class="pt-12 pb-24 md:pb-12 px-6 bg-[var(--bg-card)] border-t border-[var(--border)] relative z-10">
-    <div class="max-w-7xl mx-auto footer-grid">
-        <div class="flex flex-col items-start col-span-2 md:col-span-1">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
+        
+        <div class="flex flex-col items-start">
             <div class="bv-logo mb-4 relative !static !transform-none !items-start !opacity-100">
                 <span class="!text-3xl">BV</span><span class="!text-[8px] mt-1 font-['Montserrat'] font-bold tracking-widest">jewelry</span>
             </div>
@@ -52,9 +53,9 @@
             <a href="info.html?p=terms" class="text-[12px] text-[var(--text-main)] opacity-90 hover:text-[var(--gold-muted)] mb-3 transition" data-i18n="brand_terms">Доставка</a>
         </div>
         
-        <div class="flex flex-col items-start col-span-2 md:col-span-1">
+        <div class="flex flex-col items-start">
             <h4 class="font-serif text-[var(--text-main)] text-sm uppercase tracking-widest mb-4" data-i18n="m4">Контакти</h4>
-            <a href="#" data-setting="phone-link" class="text-[14px] text-[var(--gold-muted)] font-medium mb-2 transition hover:opacity-80 tracking-wide" data-setting-text="phone">Завантаження...</a>
+            <a href="#" data-setting="phone-link" class="text-[14px] text-[var(--gold-muted)] font-medium mb-2 transition hover:opacity-80 tracking-wide break-all" data-setting-text="phone">Завантаження...</a>
             <span class="text-[12px] text-[var(--text-muted)] mb-1" data-setting-text="workHours">Завантаження...</span>
             <span class="text-[12px] text-[var(--text-muted)] mb-4" data-setting-text="address">Завантаження...</span>
             
@@ -68,7 +69,8 @@
             </div>
         </div>
     </div>
-    <div class="mt-8 pt-6 border-t border-[var(--border)] text-center text-[11px] text-[var(--text-muted)] font-medium tracking-wide">
+    
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-[var(--border)] text-center text-[11px] text-[var(--text-muted)] font-medium tracking-wide">
         <p>© <span id="currentYear">2026</span> BV Jewelry. Всі права захищені.</p>
     </div>
 </footer>
