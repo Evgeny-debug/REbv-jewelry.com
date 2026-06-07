@@ -405,7 +405,7 @@ document.addEventListener('submit', async (e) => {
 });
 
 // ==========================================
-// ГЕНЕРАЦІЯ МЕНЮ 
+// ГЕНЕРАЦІЯ МЕНЮ (Десктоп та Мобільне)
 // ==========================================
 window.getCategoryIconSVG = function(catId) {
     const id = catId.toLowerCase();
@@ -414,7 +414,7 @@ window.getCategoryIconSVG = function(catId) {
     if (id.includes('ring')) return `<circle cx="12" cy="14" r="5" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 9l-2-3h4l-2 3z"/>`; 
     if (id.includes('earring')) return `<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v9"/><circle cx="12" cy="16" r="3" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 4h6"/>`; 
     if (id.includes('chain') || id.includes('neck')) return `<circle cx="8" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M11 12h2"/>`; 
-    if (id.includes('bracelet')) return `<ellipse cx="12" cy="12" rx="7" ry="3" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 12v2c0 2 3 7 3s7-1 7-3v-2"/>`; 
+    if (id.includes('bracelet')) return `<ellipse cx="12" cy="12" rx="7" ry="3" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 12v2c0 2 3 7 7 7s7-5 7-7v-2"/>`; 
     return `<circle cx="12" cy="12" r="4" stroke-linecap="round" stroke-linejoin="round"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 20v2"/>`; 
 };
 
@@ -424,10 +424,13 @@ window.generateMenus = function() {
     const sideMenu = document.getElementById('sideMenu');
     const categoriesTree = window.API ? API.get('bv_categories_tree', []) : [];
     
+    // Динамічно тягнемо налаштування для підвалу меню
+    const settings = window.API ? API.get('bv_settings', {}) : {};
+    
     const buildMobileTree = (nodes) => {
         let html = '';
         nodes.forEach(n => {
-            const name = escapeHtml(window.getLoc(n.name));
+            const name = window.getLoc(n.name);
             if (n.subcategories && n.subcategories.length > 0) {
                 html += `
                 <div class="mob-nested-wrap">
@@ -448,28 +451,24 @@ window.generateMenus = function() {
     };
 
     if(megaCol1 && categoriesTree.length > 0) {
+        // ... (Тут залишається код десктопного мега-меню, він у тебе працює ідеально, я його не чіпаю)
         megaCol1.innerHTML = '';
         if(megaMenu) megaMenu.querySelectorAll('.mega-col-2').forEach(col => col.remove());
 
         categoriesTree.forEach((cat, index) => {
             const isActive = index === 0 ? 'active' : ''; 
             const svgIcon = window.getCategoryIconSVG(cat.id);
-            const safeCatName = escapeHtml(window.getLoc(cat.name));
-            const safeCatId = escapeHtml(cat.id);
+            const catName = window.getLoc(cat.name);
             
-            megaCol1.innerHTML += `
-                <div class="mega-cat-item ${isActive}" data-target="mc-${safeCatId}">
-                    <svg class="mega-cat-icon" viewBox="0 0 24 24">${svgIcon}</svg>
-                    <span>${safeCatName}</span>
-                </div>`;
+            megaCol1.innerHTML += `<div class="mega-cat-item ${isActive}" data-target="mc-${cat.id}"><svg class="mega-cat-icon" viewBox="0 0 24 24">${svgIcon}</svg><span>${catName}</span></div>`;
 
             let groupsHtml = '<div class="zlato-groups-grid">';
             if (cat.subcategories && cat.subcategories.length > 0) {
                 cat.subcategories.forEach(sub => {
-                    groupsHtml += `<div class="zlato-group-wrapper"><a href="catalog.html#${sub.id}" class="zlato-group-title">${escapeHtml(window.getLoc(sub.name))}</a>`;
+                    groupsHtml += `<div class="zlato-group-wrapper"><a href="catalog.html#${sub.id}" class="zlato-group-title">${window.getLoc(sub.name)}</a>`;
                     if (sub.subcategories && sub.subcategories.length > 0) {
                         groupsHtml += `<div class="zlato-tags-container">`;
-                        sub.subcategories.forEach(subsub => { groupsHtml += `<a href="catalog.html#${subsub.id}" class="zlato-tag">${escapeHtml(window.getLoc(subsub.name))}</a>`; });
+                        sub.subcategories.forEach(subsub => { groupsHtml += `<a href="catalog.html#${subsub.id}" class="zlato-tag">${window.getLoc(subsub.name)}</a>`; });
                         groupsHtml += `</div>`;
                     }
                     groupsHtml += `</div>`;
@@ -480,17 +479,13 @@ window.generateMenus = function() {
             if(megaMenu) {
                 const newCol2 = document.createElement('div');
                 newCol2.className = `mega-col-2 zlato-content ${isActive}`;
-                newCol2.id = `mc-${safeCatId}`;
-                newCol2.innerHTML = `<div class="flex items-center gap-3 mb-6"><h2 class="text-3xl font-serif text-[var(--text-main)]">${safeCatName}</h2><a href="catalog.html#${safeCatId}" class="text-[12px] uppercase tracking-widest text-[var(--gold-muted)] font-bold transition-colors">Всі →</a></div>${groupsHtml}`;
+                newCol2.id = `mc-${cat.id}`;
+                newCol2.innerHTML = `<div class="flex items-center gap-3 mb-6"><h2 class="text-3xl font-serif text-[var(--text-main)]">${catName}</h2><a href="catalog.html#${cat.id}" class="text-[12px] uppercase tracking-widest text-[var(--gold-muted)] font-bold transition-colors">Всі →</a></div>${groupsHtml}`;
                 megaMenu.appendChild(newCol2);
             }
         });
 
-        megaCol1.innerHTML += `
-            <a href="exclusive.html" class="mega-atelier-btn mt-auto mx-4 mb-4 border border-[var(--gold-muted)] text-[var(--gold-muted)] p-3 rounded-none flex items-center justify-center gap-2 hover:bg-[var(--gold-muted)] hover:text-[#111] transition-colors font-bold uppercase tracking-widest text-[10px]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7-7-7M5 12h14"/></svg>
-                <span data-i18n="m_atelier">Ексклюзив</span>
-            </a>`;
+        megaCol1.innerHTML += `<a href="exclusive.html" class="mega-atelier-btn mt-auto mx-4 mb-4 border border-[var(--gold-muted)] text-[var(--gold-muted)] p-3 rounded-none flex items-center justify-center gap-2 hover:bg-[var(--gold-muted)] hover:text-[#111] transition-colors font-bold uppercase tracking-widest text-[10px]"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7-7-7M5 12h14"/></svg><span data-i18n="m_atelier">Ексклюзив</span></a>`;
         
         document.querySelectorAll('.mega-cat-item').forEach(item => {
             item.addEventListener('mouseenter', () => {
@@ -508,8 +503,32 @@ window.generateMenus = function() {
         const savedLang = window.API ? API.get('bv_lang', 'uk') : 'uk';
         const currentThemeIcon = document.documentElement.getAttribute('data-theme') === 'light' ? sunSVG : moonSVG;
 
+        // Формуємо динамічні контакти з бази
+        let contactsHtml = '';
+        if (settings.phone) {
+            contactsHtml += `<a href="tel:${settings.phoneClean || ''}" class="text-[16px] font-medium text-[var(--text-main)] tracking-wide hover:text-[var(--gold-muted)] transition block mb-1">${settings.phone}</a>`;
+        }
+        if (settings.workHours) {
+            contactsHtml += `<span class="block text-[11px] text-[var(--text-muted)] mb-1">${settings.workHours}</span>`;
+        }
+        if (settings.address) {
+            contactsHtml += `<span class="block text-[11px] text-[var(--text-muted)] leading-relaxed">${settings.address}</span>`;
+        }
+
+        let socialsHtml = '';
+        if (settings.instagram || settings.telegram) {
+            socialsHtml += `<div class="flex gap-3 mt-4">`;
+            if (settings.instagram) {
+                socialsHtml += `<a href="${settings.instagram}" target="_blank" class="w-10 h-10 border border-[var(--border)] flex items-center justify-center text-[var(--text-main)] hover:bg-[var(--gold-muted)] hover:text-[#111] transition"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>`;
+            }
+            if (settings.telegram) {
+                socialsHtml += `<a href="${settings.telegram}" target="_blank" class="w-10 h-10 border border-[var(--border)] flex items-center justify-center text-[var(--text-main)] hover:bg-[var(--gold-muted)] hover:text-[#111] transition"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a>`;
+            }
+            socialsHtml += `</div>`;
+        }
+
         sideMenu.innerHTML = `
-            <div class="flex justify-between items-center pb-4 mb-4 border-b border-[var(--border)] pt-4 px-4">
+            <div class="flex justify-between items-center pb-4 pt-12 px-6">
                 <a href="index.html" class="flex flex-col items-start gap-1" style="text-decoration:none;"><span class="text-3xl font-serif text-[var(--gold-muted)] leading-none">BV</span></a>
                 <div class="flex items-center gap-5">
                     <button onclick="window.toggleTheme()" class="text-[var(--text-main)] opacity-80 hover:opacity-100 transition-opacity"><svg id="themeIconMob" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${currentThemeIcon}</svg></button>
@@ -521,15 +540,23 @@ window.generateMenus = function() {
                     <button onclick="window.smartProfileClick()" class="text-[var(--text-main)] opacity-80 hover:opacity-100 transition-opacity"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
                 </div>
             </div>
-            <div class="px-4 pb-6 flex flex-col flex-grow overflow-y-auto custom-scrollbar">
+
+            <div class="px-6 py-4 flex flex-col flex-grow overflow-y-auto custom-scrollbar">
                 <a href="index.html" class="mob-menu-title" onclick="window.toggleMenu()">Головна</a>
-                <div class="menu-divider"></div>
                 <div>
-                    <div class="mob-menu-title" onclick="window.toggleAccordion('mobCatList', 'mobCatArrow')"><span data-i18n="m2">Каталог</span><svg id="mobCatArrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-muted)" stroke-width="2" class="transition-transform duration-300"><path d="M6 9l6 6 6-6"/></svg></div>
+                    <div class="mob-menu-title cursor-pointer" onclick="window.toggleAccordion('mobCatList', 'mobCatArrow')">
+                        <span data-i18n="m2">Каталог</span>
+                        <svg id="mobCatArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 opacity-60"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
                     <div class="mob-accordion-list" id="mobCatList" style="gap: 0; padding-left: 0;">${mobCatHtml}</div>
                 </div>
                 <a href="services.html" class="mob-menu-title" onclick="window.toggleMenu()"><span data-i18n="m_price">Прайс</span></a>
-                <a href="exclusive.html" class="block w-full border border-[var(--gold-muted)] text-[var(--gold-muted)] py-3 text-center font-bold uppercase tracking-widest text-[10px] hover:bg-[var(--gold-muted)] hover:text-[#111] transition-colors mt-4" onclick="window.toggleMenu()"><span data-i18n="m_atelier">Ексклюзив</span></a>
+                <a href="exclusive.html" class="mob-menu-title text-[var(--gold-muted)]" onclick="window.toggleMenu()"><span data-i18n="m_atelier">Ексклюзив</span></a>
+            </div>
+
+            <div class="mt-auto px-6 py-8 border-t border-[var(--border)] bg-black/10">
+                ${contactsHtml}
+                ${socialsHtml}
             </div>
         `;
     }

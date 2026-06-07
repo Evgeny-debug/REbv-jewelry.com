@@ -97,6 +97,7 @@ p, .panel-desc, .nav-link, .dropdown-item, .auth-input {
 [data-theme="light"] .badge-sold-out {
     background-color: #5A544C !important;
 }
+
 /* ==========================================
    ШАПКА (HEADER)
    ========================================== */
@@ -363,11 +364,13 @@ header.scrolled {
 /* Каруселі товарів з інерцією та фіксом тіней */
 .promo-carousel-container, .weekly-carousel-container { 
     position: relative; width: 100%; overflow: hidden; cursor: grab; touch-action: pan-y;
-    padding-top: 24px; padding-bottom: 32px; margin-top: -24px; margin-bottom: -32px; 
+    padding: 0; margin: 0; 
 }
 .promo-carousel-container.active, .weekly-carousel-container.active { cursor: grabbing; }
-.promo-track, .weekly-track { display: flex; gap: 16px; width: max-content; will-change: transform; padding: 10px 0; padding-right: 15vw; }
-
+.promo-track, .weekly-track { 
+    display: flex; gap: 16px; width: max-content; will-change: transform; 
+    padding: 0; padding-right: 15vw; 
+}
 .promo-track .product-card, .weekly-track .product-card { width: calc(55vw - 10px); flex-shrink: 0; }
 @media (min-width: 768px) { .promo-track .product-card, .weekly-track .product-card { width: calc(28vw - 15px); } } 
 @media (min-width: 1280px) { .promo-track .product-card, .weekly-track .product-card { width: calc(16.666vw - 20px); gap: 20px;} }
@@ -439,7 +442,12 @@ header.scrolled {
 .cart-drawer, .side-menu { position: fixed; top: 0; height: 100vh; background: color-mix(in srgb, var(--bg-card) 78%, transparent); backdrop-filter: blur(30px); border: 1px solid var(--border); box-shadow: var(--shadow-strong); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 5501; display: flex; flex-direction: column; }
 .cart-drawer { right: -100%; width: 100%; max-width: 440px; border-left-width: 1px; }
 .cart-drawer.active { right: 0; }
-.side-menu { left: -100%; width: 85%; max-width: 360px; border-right-width: 1px; padding: 100px 24px 40px; gap: 16px; overflow-y: auto; z-index: 5000;}
+
+.side-menu { 
+    left: -100%; width: 85%; max-width: 360px; border-right-width: 1px; 
+    padding: 0; overflow-y: hidden; z-index: 5000; 
+    display: flex; flex-direction: column; 
+}
 .side-menu.active { left: 0; }
 
 .cart-header { display: flex; justify-content: space-between; padding: 30px 40px; border-bottom: 1px solid var(--border); }
@@ -527,14 +535,46 @@ header.scrolled {
     .bottom-nav-item.active svg { stroke-width: 2; transform: translateY(-2px); }
     
     /* Сайдбар мобільний */
-    .mob-menu-title { font-size: 15px; font-weight: 500; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; padding: 12px 0; text-decoration: none;}
+    .side-menu { 
+        width: 90%; 
+        max-width: 420px; 
+        padding: 0; 
+        background: color-mix(in srgb, var(--bg-card) 85%, transparent);
+        backdrop-filter: blur(40px) saturate(180%);
+        box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+        display: flex;
+        flex-direction: column;
+    }
+    [data-theme="light"] .side-menu {
+        background: color-mix(in srgb, var(--bg-card) 90%, transparent);
+        box-shadow: 20px 0 50px rgba(0,0,0,0.1);
+    }
+    .mob-menu-title { 
+        font-family: 'Playfair Display', serif;
+        font-size: 20px; 
+        font-weight: 400; 
+        color: var(--text-main); 
+        display: flex; justify-content: space-between; align-items: center; 
+        letter-spacing: 0.05em; opacity: 0.9; padding: 14px 0; text-decoration: none;
+        border-bottom: none; 
+    }
+    .menu-divider { display: none; }
     .mob-atelier-link { color: var(--gold-muted) !important; border: 1px solid rgba(197, 160, 89, 0.3); padding: 14px 16px; border-radius: 16px; background: rgba(197, 160, 89, 0.05); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-decoration: none;}
     .mob-accordion-list { display: flex; flex-direction: column; overflow: hidden; max-height: 0; transition: max-height 0.4s ease; opacity: 0; margin-top: 0; }
     .mob-accordion-list.open { max-height: 2000px; opacity: 1; margin-top: 10px; } 
-    .mob-nested-wrap { border-bottom: 1px solid var(--border); }
-    .mob-nested-title { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; transition: 0.3s; }
+    .mob-nested-wrap { border-bottom: none; }
+    .mob-nested-title { 
+        display: flex; justify-content: space-between; align-items: center; 
+        padding: 14px 0; font-size: 14px; font-weight: 500; text-transform: uppercase; 
+        letter-spacing: 1px; opacity: 0.8; transition: 0.3s; 
+    }
     .mob-nested-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 10px; }
-    .mob-nested-list.open { max-height: 800px; padding: 15px 10px; margin-bottom: 10px; background: rgba(0,0,0,0.05); border-radius: 12px; }
+    .mob-nested-list.open { 
+        max-height: 800px; 
+        padding: 10px 0; 
+        background: transparent; 
+        border-bottom: none; 
+    }
     .mob-sub-links { display: flex; flex-direction: column; gap: 16px; margin-bottom: 10px; }
     .mob-sub-links .sub-cat-link { font-size: 14px; opacity: 0.7;}
     .mob-sub-links .sub-cat-link:hover { color: var(--gold-muted); opacity: 1;}
@@ -1009,41 +1049,9 @@ body.menu-open {
    ========================================== */
 
 /* Робимо меню трохи ширшим на сучасних телефонах */
-.side-menu {
-    width: 90%; 
-    max-width: 420px; 
-    padding: 80px 24px 40px; 
-    background: color-mix(in srgb, var(--bg-card) 85%, transparent);
-    backdrop-filter: blur(40px) saturate(180%);
-    box-shadow: 20px 0 50px rgba(0,0,0,0.5);
-}
-[data-theme="light"] .side-menu {
-    background: color-mix(in srgb, var(--bg-card) 90%, transparent);
-    box-shadow: 20px 0 50px rgba(0,0,0,0.1);
-}
-
-/* Покращені заголовки меню */
-.mob-menu-title {
-    font-size: 16px;
-    font-weight: 600;
-    padding: 16px 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
-}
-
-/* Розділювач */
-.menu-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 10px 0;
-    opacity: 0.5;
-}
+/* ВИДАЛЕНО СТАРІ КЛАСИ, ЩОБ УНИКНУТИ ДУБЛЮВАННЯ .side-menu ТУТ, УВЕСЬ СТИЛЬ ВЖЕ Є ВИЩЕ */
 
 /* --- НОВІ СТИЛІ ДЛЯ КАТАЛОГУ ВСЕРЕДИНІ БУРГЕРА --- */
-.mob-nested-list.open {
-    padding: 16px 0;
-    background: transparent;
-    border-bottom: 1px solid var(--border);
-}
 
 /* Заголовок групи (наприклад "За металом") */
 .mob-group-title {
