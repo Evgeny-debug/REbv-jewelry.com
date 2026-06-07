@@ -188,6 +188,19 @@
         });
     }
 
+
+
+    window.addEventListener('load', () => {
+    const bottomBar = document.querySelector('.admin-bottom-nav');
+    const mainContent = document.getElementById('mainContent');
+    
+    if (bottomBar && mainContent) {
+        // Устанавливаем отступ, равный высоте бара + небольшой запас (20px)
+        const barHeight = bottomBar.offsetHeight;
+        mainContent.style.paddingBottom = (barHeight + 20) + 'px';
+    }
+    });
+
     window.updateOrderStatus = function(id, newStatus) {
         const idx = ordersList.findIndex(o => String(o.id) === String(id));
         if(idx > -1) {
@@ -925,5 +938,33 @@
         }
         
     }, 500);
+
+
+
+window.switchTab = function(tabName) {
+    // 1. Снимаем активность со всех кнопок (и в сайдбаре, и в нижнем баре)
+    document.querySelectorAll('.tab-btn, .nav-btn').forEach(btn => { 
+        btn.classList.remove('active', 'text-[#c5a059]', 'bg-white/5');
+        btn.classList.add('text-gray-400'); 
+    });
+    
+    // 2. Скрываем все разделы
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+    
+    // 3. Активируем нужную
+    const activeBtns = document.querySelectorAll(`[onclick="switchTab('${tabName}')"]`);
+    activeBtns.forEach(btn => {
+        btn.classList.add('active', 'text-[#c5a059]');
+        btn.classList.remove('text-gray-400');
+    });
+    
+    const contentTab = document.getElementById('content-' + tabName);
+    if(contentTab) contentTab.classList.remove('hidden');
+    
+    if(tabName === 'builder') window.loadPageBuilderForm();
+};
+
+
+
 
 })();
