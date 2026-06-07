@@ -409,7 +409,7 @@
                     reader.onload = ev => { actProd.variations[editVar].images.push(ev.target.result); renderVarGallery(); };
                     reader.readAsDataURL(file);
                 });
-                e.target.value = '';
+                e.target.value = ''; // Сброс для повторной загрузки того же файла
             });
         }
         renderVarGallery();
@@ -430,8 +430,9 @@
     }
     window.renderVarGallery = renderVarGallery;
 
-    window.saveActiveProduct = async function() {
-        const submitBtn = document.querySelector('.btn-primary[onclick="window.saveActiveProduct()"]');
+    window.saveActiveProduct = async function(event) {
+        if(event) event.preventDefault();
+        const submitBtn = document.querySelector('.btn-primary[onclick*="saveActiveProduct"]');
         if(submitBtn) { submitBtn.innerText = 'Зберігаю...'; submitBtn.disabled = true; }
 
         try {
@@ -601,6 +602,15 @@
             if(targetEl) targetEl.value = e.target.result;
         };
         reader.readAsDataURL(file);
+        event.target.value = ''; // Сброс для возможности загрузить то же самое фото
+    };
+
+    // Очистка картинок
+    window.clearImageInput = function(previewId, targetInputId) {
+        const preview = document.getElementById(previewId);
+        if(preview) { preview.src = ''; preview.classList.add('hidden'); }
+        const targetEl = document.getElementById(targetInputId);
+        if(targetEl) targetEl.value = '';
     };
 
     function renderBlocksAdmin() {
@@ -618,13 +628,7 @@
         const form = document.getElementById('blockForm');
         if(form) form.reset(); 
         document.getElementById('block-old-id').value = '';
-        
-        // Очистка фото
-        document.getElementById('block-bg-img').value = '';
-        const preview = document.getElementById('blockBgPreview');
-        if(preview) { preview.classList.add('hidden'); preview.src = ''; }
-        const clearBtn = document.getElementById('blockBgClearBtn');
-        if(clearBtn) clearBtn.classList.remove('opacity-100');
+        window.clearImageInput('blockBgPreview', 'block-bg-img');
 
         if(id) {
             const b = homeBlocks.find(x => x.id === id);
@@ -635,11 +639,10 @@
             document.getElementById('block-name-en').value = b.name?.en || '';
             document.getElementById('block-active').checked = b.active;
             
-            // Если есть фон, показываем его
             if (b.bgImage) {
                 document.getElementById('block-bg-img').value = b.bgImage;
+                const preview = document.getElementById('blockBgPreview');
                 if(preview) { preview.src = b.bgImage; preview.classList.remove('hidden'); }
-                if(clearBtn) clearBtn.classList.add('opacity-100');
             }
         } else { 
             const activeCheck = document.getElementById('block-active');
@@ -666,12 +669,12 @@
     window.openBannerModal = function(id = null) {
         const form = document.getElementById('bannerForm');
         if(form) form.reset(); 
-        const preview = document.getElementById('bannerPreview');
-        if(preview) preview.classList.add('hidden'); 
-        document.getElementById('banner-id').value = ''; document.getElementById('banner-img').value = ''; document.getElementById('bannerModalTitle').innerText = 'Додати Банер';
+        window.clearImageInput('bannerPreview', 'banner-img');
+        document.getElementById('banner-id').value = ''; document.getElementById('bannerModalTitle').innerText = 'Додати Банер';
         if(id) {
             const b = banners.find(ban => ban.id === id);
             document.getElementById('banner-id').value = b.id; document.getElementById('banner-img').value = b.img; document.getElementById('banner-link').value = b.link || ''; 
+            const preview = document.getElementById('bannerPreview');
             if(preview) {
                 preview.src = b.img;
                 preview.style.aspectRatio = siteSettings.bannerRatio || '3/1'; preview.classList.remove('hidden'); 
@@ -694,21 +697,23 @@
     window.openProcessModal = function(id = null) {
         const form = document.getElementById('processForm');
         if(form) form.reset(); 
-        const preview = document.getElementById('processPreview');
-        if(preview) preview.classList.add('hidden'); 
-        document.getElementById('process-id').value = ''; document.getElementById('process-img').value = ''; document.getElementById('processModalTitle').innerText = 'Додати етап';
-        if(id) { const step = exclusiveProcess.find(s => s.id === id); document.getElementById('process-id').value = step.id; document.getElementById('process-title').value = step.title; document.getElementById('process-desc').value = step.desc; document.getElementById('process-img').value = step.img; if(preview) { preview.src = step.img; preview.classList.remove('hidden'); } document.getElementById('processModalTitle').innerText = 'Редагувати етап'; }
+        window.clearImageInput('processPreview', 'process-img');
+        document.getElementById('process-id').value = ''; document.getElementById('processModalTitle').innerText = 'Додати етап';
+        if(id) { const step = exclusiveProcess.find(s => s.id === id); document.getElementById('process-id').value = step.id; document.getElementById('process-title').value = step.title; document.getElementById('process-desc').value = step.desc; document.getElementById('process-img').value = step.img; const preview = document.getElementById('processPreview'); if(preview) { preview.src = step.img; preview.classList.remove('hidden'); } document.getElementById('processModalTitle').innerText = 'Редагувати етап'; }
         document.getElementById('processModal').classList.remove('hidden'); setTimeout(() => document.getElementById('processModal').classList.remove('opacity-0'), 10);
     };
 
     window.closeProcessModal = function() { document.getElementById('processModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('processModal').classList.add('hidden'), 300); };
-    window.saveProcessStep = function() {
+    
+    window.saveProcessStep = function(event) {
+        if(event) event.preventDefault();
         const idInput = document.getElementById('process-id').value; const imgData = document.getElementById('process-img').value;
         if(!imgData) return alert('Завантажте фото!');
         const stepData = { id: idInput ? parseInt(idInput) : Date.now(), title: document.getElementById('process-title').value, desc: document.getElementById('process-desc').value, img: imgData };
         if(idInput) { const idx = exclusiveProcess.findIndex(s => s.id === parseInt(idInput)); if(idx !== -1) exclusiveProcess[idx] = stepData; } else { exclusiveProcess.push(stepData); }
         API.set('bv_exclusive_process', exclusiveProcess); renderExclusiveProcessAdmin(); window.closeProcessModal(); window.showNotification('Збережено!');
     };
+    
     window.deleteProcessStep = function(id) { if(confirm('Видалити цей етап?')) { exclusiveProcess = exclusiveProcess.filter(s => s.id !== id); API.set('bv_exclusive_process', exclusiveProcess); renderExclusiveProcessAdmin(); window.showNotification('Видалено'); } };
 
     function renderExclusiveMaterialsAdmin() {
@@ -727,7 +732,9 @@
     };
 
     window.closeMaterialModal = function() { document.getElementById('materialModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('materialModal').classList.add('hidden'), 300); };
-    window.saveMaterialOption = function() {
+    
+    window.saveMaterialOption = function(event) {
+        if(event) event.preventDefault();
         const oldId = document.getElementById('material-old-id').value; const newId = document.getElementById('material-id').value.toLowerCase(); const isSelected = document.getElementById('material-selected').checked;
         if(isSelected) exclusiveMaterials.forEach(m => m.selected = false);
         const matData = { id: newId, label: document.getElementById('material-label').value, selected: isSelected };
@@ -735,6 +742,7 @@
         if(!exclusiveMaterials.find(m => m.selected) && exclusiveMaterials.length > 0) exclusiveMaterials[0].selected = true; 
         API.set('bv_exclusive_materials', exclusiveMaterials); renderExclusiveMaterialsAdmin(); window.closeMaterialModal(); window.showNotification('Кнопку збережено!');
     };
+    
     window.deleteMaterialOption = function(id) { if(confirm('Видалити цю кнопку з форми?')) { exclusiveMaterials = exclusiveMaterials.filter(m => m.id !== id); if(!exclusiveMaterials.find(m => m.selected) && exclusiveMaterials.length > 0) exclusiveMaterials[0].selected = true; API.set('bv_exclusive_materials', exclusiveMaterials); renderExclusiveMaterialsAdmin(); window.showNotification('Кнопку видалено'); } };
 
     window.loadPageBuilderForm = function() {
@@ -786,7 +794,8 @@
     window.removeAddressField = function(index) { currentAddresses.splice(index, 1); renderAddresses(); };
 
     window.saveSiteSettings = function(event) {
-        const btn = event ? event.target : document.querySelector('.btn-primary[onclick="window.saveSiteSettings(event)"]');
+        if(event) event.preventDefault();
+        const btn = event ? event.target : document.querySelector('.btn-primary[onclick*="saveSiteSettings"]');
         const originalText = btn ? btn.innerText : 'Зберегти';
         if(btn) { btn.innerText = 'Зберігаю...'; btn.disabled = true; }
 
@@ -863,7 +872,7 @@
                 e.preventDefault();
                 const oldId = document.getElementById('block-old-id').value; 
                 const newId = document.getElementById('block-id').value.toLowerCase();
-                const bgImg = document.getElementById('block-bg-img').value; // Берем картинку
+                const bgImg = document.getElementById('block-bg-img').value;
                 
                 const data = { 
                     id: newId, 
@@ -873,7 +882,7 @@
                         en: document.getElementById('block-name-en').value 
                     }, 
                     active: document.getElementById('block-active').checked,
-                    bgImage: bgImg || null // Сохраняем картинку
+                    bgImage: bgImg || null 
                 };
                 
                 if(oldId) { 
@@ -902,6 +911,47 @@
                 API.set('bv_banners', banners); renderBannersAdmin(); window.closeBannerModal(); window.showNotification('Збережено!');
             };
         }
+
+        // Подключаем onsubmit для формы Эксклюзива (Этапы)
+        const processForm = document.getElementById('processForm');
+        if(processForm) {
+            processForm.onsubmit = window.saveProcessStep;
+        }
+
+        // Подключаем onsubmit для формы Материалов
+        const materialForm = document.getElementById('materialForm');
+        if(materialForm) {
+            materialForm.onsubmit = window.saveMaterialOption;
+        }
+        
     }, 500);
+
+
+
+window.switchTab = function(tabName) {
+    // 1. Снимаем активность со всех кнопок (и в сайдбаре, и в нижнем баре)
+    document.querySelectorAll('.tab-btn, .nav-btn').forEach(btn => { 
+        btn.classList.remove('active', 'text-[#c5a059]', 'bg-white/5');
+        btn.classList.add('text-gray-400'); 
+    });
+    
+    // 2. Скрываем все разделы
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+    
+    // 3. Активируем нужную
+    const activeBtns = document.querySelectorAll(`[onclick="switchTab('${tabName}')"]`);
+    activeBtns.forEach(btn => {
+        btn.classList.add('active', 'text-[#c5a059]');
+        btn.classList.remove('text-gray-400');
+    });
+    
+    const contentTab = document.getElementById('content-' + tabName);
+    if(contentTab) contentTab.classList.remove('hidden');
+    
+    if(tabName === 'builder') window.loadPageBuilderForm();
+};
+
+
+
 
 })();

@@ -18,27 +18,7 @@
     </div>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="window.toggleAdminMenu()"></div>
 
-    <aside id="sidebar" class="admin-sidebar glass-panel flex flex-col h-full lg:h-[calc(100vh-32px)]">
-        <div class="p-6 border-b border-white/10 text-center hidden lg:block">
-            <h2 class="text-xl font-serif text-[#c5a059]">BV Jewelry</h2>
-            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Control Panel</p>
-        </div>
-        <nav class="flex-1 p-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-            <button onclick="window.switchTab('orders')" id="tab-orders" class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-white/5 text-[#c5a059] font-medium transition text-sm">🛒 Замовлення</button>
-            <button onclick="window.switchTab('products')" id="tab-products" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">📦 Товари</button>
-            <button onclick="window.switchTab('categories')" id="tab-categories" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🗂 Категорії</button>
-            <button onclick="window.switchTab('blocks')" id="tab-blocks" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🧩 Блоки Головної</button>
-            <button onclick="window.switchTab('home-visuals')" id="tab-home-visuals" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🖼 Головна (Банери)</button>
-            <button onclick="window.switchTab('exclusive')" id="tab-exclusive" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">💎 Ексклюзив</button>
-            <button onclick="window.switchTab('builder')" id="tab-builder" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">🎨 Конструктор та Кольори</button>
-            <button onclick="window.switchTab('price-builder')" id="tab-price-builder" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">📋 Редактор Прайсу</button>
-            <button onclick="window.switchTab('settings')" id="tab-settings" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition text-gray-400 text-sm">⚙️ Налаштування</button>
-        </nav>
-        <div class="p-4 border-t border-white/10 space-y-2">
-            <a href="index.html" class="block w-full text-center py-2 text-xs bg-white/5 rounded-lg text-gray-300 hover:text-[#c5a059] transition">Перейти на сайт ↗</a>
-            <button onclick="window.logout()" class="w-full py-2 text-xs text-red-400 hover:text-red-300 transition">Вийти з панелі</button>
-        </div>
-    </aside>
+    
 
     <main id="mainContent" class="flex-1 p-4 overflow-y-auto h-full custom-scrollbar">
         
@@ -357,7 +337,51 @@
         </div>
     </div>
 
+
+
+<nav class="admin-bottom-nav">
+    <!-- Кнопка Додому (переход на сайт) -->
+    <button class="nav-btn" onclick="window.location.href='index.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        На сайт
+    </button>
+    <button class="nav-btn" onclick="switchTab('orders')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+        Замовлення
+    </button>
+    <button class="nav-btn" onclick="switchTab('products')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Товари
+    </button>
+    <button class="nav-btn" onclick="switchTab('categories')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+        Категорії
+    </button>
+    <button class="nav-btn" onclick="switchTab('blocks')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+        Блоки
+    </button>
+    <button class="nav-btn" onclick="switchTab('home-visuals')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Банери
+    </button>
+    <button class="nav-btn" onclick="switchTab('exclusive')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Ексклюзив
+    </button>
+    <button class="nav-btn" onclick="switchTab('builder')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg>
+        Конструктор
+    </button>
+    <button class="nav-btn" onclick="switchTab('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Налаштування
+    </button>
+</nav>
+
     <script src="js/core/api.js?v=5"></script>
     <script src="js/pages/admin.js?v=5"></script>
+
+
 </body>
 </html>
