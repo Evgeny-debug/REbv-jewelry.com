@@ -1,0 +1,88 @@
+/* ==========================================
+   ADMIN LUXURY DARK MODE - MODERNIZED
+   ========================================== */
+:root {
+    --bg-admin: #0a0a0a;
+    --card-admin: #141414;
+    --accent: #c5a059;
+    --text-main: #ffffff;
+    --text-muted: #6b7280;
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { 
+    margin: 0; font-family: 'Inter', sans-serif; 
+    background-color: var(--bg-admin); color: var(--text-main);
+    line-height: 1.5; font-size: 14px;
+}
+
+/* ШРИФТИ ДЛЯ АДМІНКИ */
+h1, h2, h3, .admin-title { font-family: 'Playfair Display', serif; font-weight: 300; letter-spacing: 0.02em; }
+.btn-primary, .btn-secondary, .btn-danger { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* КАРТКИ ТА ПАНЕЛІ */
+.glass-panel { background: var(--card-admin); border: 1px solid var(--border); border-radius: 0; padding: 20px; }
+
+/* ІНПУТИ */
+.input-field { 
+    width: 100%; background: #1a1a1a; border: 1px solid var(--border); 
+    padding: 12px; color: white; outline: none; border-radius: 0; font-size: 13px;
+    transition: all 0.3s;
+}
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+/* КНОПКИ */
+.btn-primary { background: var(--accent); color: #000; padding: 12px 24px; cursor: pointer; transition: 0.3s; }
+.btn-primary:hover { background: #b08d4a; }
+.btn-secondary { background: #262626; color: #fff; padding: 10px 20px; cursor: pointer; }
+.btn-secondary:hover { background: #333; }
+.btn-danger { background: #7f1d1d; color: #fca5a5; padding: 10px 20px; cursor: pointer; }
+.btn-danger:hover { background: #991b1b; }
+
+/* АДМІН-САЙДБАР (АДАПТИВ) */
+.admin-sidebar { 
+    position: fixed; top: 0; left: -100%; z-index: 50; width: 280px; height: 100vh;
+    background: #000; border-right: 1px solid var(--border); transition: 0.3s;
+}
+.admin-sidebar.open { left: 0; }
+.sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 40; display: none; backdrop-filter: blur(4px); }
+.sidebar-overlay.active { display: block; }
+
+@media (min-width: 1024px) {
+    .admin-sidebar { position: sticky; left: 0; height: 100vh; border-right: 1px solid var(--border); }
+    .sidebar-overlay { display: none !important; }
+}
+
+/* ТАБЛИЦЯ ТА МОБІЛЬНІ КАРТКИ */
+.table-container { width: 100%; border: 1px solid var(--border); background: var(--card-admin); }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 12px; font-size: 10px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+td { padding: 16px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+
+@media (max-width: 768px) {
+    .mobile-card-table thead { display: none; }
+    .mobile-card-table tr { 
+        display: block; border-bottom: 2px solid var(--border); 
+        padding: 16px 0; background: transparent; 
+    }
+    .mobile-card-table td { 
+        display: flex; justify-content: space-between; padding: 8px 0; border: none;
+    }
+    .mobile-card-table td::before { 
+        content: attr(data-label); color: var(--text-muted); font-size: 10px; 
+        text-transform: uppercase; font-weight: 700;
+    }
+}
+
+/* СКРОЛЛБАР */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--accent); }
+
+/* ТОАСТ */
+.toast { 
+    position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: #000; 
+    padding: 16px 24px; font-weight: 700; z-index: 9999;
+    transform: translateY(100px); opacity: 0; transition: 0.4s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
