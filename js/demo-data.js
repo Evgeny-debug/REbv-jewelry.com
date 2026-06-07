@@ -137,7 +137,39 @@ const DEMO_DATA = {
         }
     }
 };
-
+// Функция-генератор: создает 400 товаров автоматически
+function generate400Products() {
+    const products = [];
+    const categories = ["rings", "earrings", "necklaces", "bracelets", "gold_rings", "silver_rings"];
+    const variants = ["Золото 585", "Срібло 925", "Біле золото"];
+    const badges = ["new", "sale", "exclusive", "none"];
+    
+    for (let i = 1; i <= 400; i++) {
+        const cat = categories[Math.floor(Math.random() * categories.length)];
+        const varName = variants[Math.floor(Math.random() * variants.length)];
+        
+        products.push({
+            id: `prod-${i}`,
+            sku: `SKU-${1000 + i}`,
+            category: cat,
+            status: "in-stock",
+            badge: badges[Math.floor(Math.random() * badges.length)],
+            blocks: (Math.random() > 0.8) ? ["hits"] : [],
+            sizes: ["16", "16.5", "17", "17.5", "18"],
+            variant: varName,
+            variations: {
+                base: {
+                    name: { uk: `Виріб ${i}`, ru: `Изделие ${i}`, en: `Item ${i}` },
+                    desc: { uk: `Опис виробу ${i}`, ru: `Описание изделия ${i}`, en: `Item description ${i}` },
+                    price: Math.floor(Math.random() * 20000) + 1000,
+                    discount: (Math.random() > 0.7) ? Math.floor(Math.random() * 1000) + 500 : null,
+                    images: [`https://picsum.photos/seed/${i}/400/400`] // Генерирует уникальные фото
+                }
+            }
+        });
+    }
+    return products;
+}
 // Ініціалізація локальної БД при першому запуску
 function initLocalDB() {
     if (!localStorage.getItem('bv_is_initialized')) {

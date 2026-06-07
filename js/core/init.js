@@ -66,6 +66,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadComponent("header-placeholder", "components/header.html");
     await loadComponent("footer-placeholder", "components/footer.html");
     
+    // Внутри DOMContentLoaded, после загрузки данных:
+    if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+    const products = API.get('bv_products', []);
+    const container = document.getElementById('homeProductsGrid');
+    
+    if (container && products.length > 0) {
+        // Рендерим первые 8 товаров
+        container.innerHTML = products.slice(0, 8).map(p =>`<div class="flex-none w-[60%] sm:w-[40%] md:w-[25%] snap-start">${window.renderProductCard(p)}</div>`).join('');
+        
+        // Активируем скролл для этого трека
+        window.initPremiumCarousel(container);
+        }
+    }
+
+
+
+
     // 2. ТІЛЬКИ ТЕПЕР, коли всі блоки на місці, завантажуємо дані і будуємо меню
     if (!window.location.pathname.includes('admin.html')) {
         if (typeof migrateScopedState === 'function') migrateScopedState();
@@ -132,3 +149,4 @@ window.addEventListener('scroll', () => {
     }
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 }, { passive: true });
+

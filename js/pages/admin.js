@@ -618,16 +618,36 @@
         const form = document.getElementById('blockForm');
         if(form) form.reset(); 
         document.getElementById('block-old-id').value = '';
+        
+        // Очистка фото
+        document.getElementById('block-bg-img').value = '';
+        const preview = document.getElementById('blockBgPreview');
+        if(preview) { preview.classList.add('hidden'); preview.src = ''; }
+        const clearBtn = document.getElementById('blockBgClearBtn');
+        if(clearBtn) clearBtn.classList.remove('opacity-100');
+
         if(id) {
             const b = homeBlocks.find(x => x.id === id);
-            document.getElementById('block-old-id').value = b.id; document.getElementById('block-id').value = b.id;
-            document.getElementById('block-name-uk').value = b.name?.uk || ''; document.getElementById('block-name-ru').value = b.name?.ru || ''; document.getElementById('block-name-en').value = b.name?.en || '';
+            document.getElementById('block-old-id').value = b.id; 
+            document.getElementById('block-id').value = b.id;
+            document.getElementById('block-name-uk').value = b.name?.uk || ''; 
+            document.getElementById('block-name-ru').value = b.name?.ru || ''; 
+            document.getElementById('block-name-en').value = b.name?.en || '';
             document.getElementById('block-active').checked = b.active;
+            
+            // Если есть фон, показываем его
+            if (b.bgImage) {
+                document.getElementById('block-bg-img').value = b.bgImage;
+                if(preview) { preview.src = b.bgImage; preview.classList.remove('hidden'); }
+                if(clearBtn) clearBtn.classList.add('opacity-100');
+            }
         } else { 
             const activeCheck = document.getElementById('block-active');
             if(activeCheck) activeCheck.checked = true; 
         }
-        document.getElementById('blockModal').classList.remove('hidden'); setTimeout(() => document.getElementById('blockModal').classList.remove('opacity-0'), 10);
+        
+        document.getElementById('blockModal').classList.remove('hidden'); 
+        setTimeout(() => document.getElementById('blockModal').classList.remove('opacity-0'), 10);
     };
 
     window.closeBlockModal = function() { document.getElementById('blockModal').classList.add('opacity-0'); setTimeout(() => document.getElementById('blockModal').classList.add('hidden'), 300); };
@@ -841,10 +861,33 @@
         if(blkForm) {
             blkForm.onsubmit = (e) => {
                 e.preventDefault();
-                const oldId = document.getElementById('block-old-id').value; const newId = document.getElementById('block-id').value.toLowerCase();
-                const data = { id: newId, name: { uk: document.getElementById('block-name-uk').value, ru: document.getElementById('block-name-ru').value, en: document.getElementById('block-name-en').value }, active: document.getElementById('block-active').checked };
-                if(oldId) { const idx = homeBlocks.findIndex(b => b.id === oldId); if(idx > -1) homeBlocks[idx] = data; } else { if(homeBlocks.find(b => b.id === newId)) return alert('Блок з таким ID вже існує'); homeBlocks.push(data); }
-                API.set('bv_home_blocks', homeBlocks); renderBlocksAdmin(); window.closeBlockModal(); window.showNotification('Блок збережено');
+                const oldId = document.getElementById('block-old-id').value; 
+                const newId = document.getElementById('block-id').value.toLowerCase();
+                const bgImg = document.getElementById('block-bg-img').value; // Берем картинку
+                
+                const data = { 
+                    id: newId, 
+                    name: { 
+                        uk: document.getElementById('block-name-uk').value, 
+                        ru: document.getElementById('block-name-ru').value, 
+                        en: document.getElementById('block-name-en').value 
+                    }, 
+                    active: document.getElementById('block-active').checked,
+                    bgImage: bgImg || null // Сохраняем картинку
+                };
+                
+                if(oldId) { 
+                    const idx = homeBlocks.findIndex(b => b.id === oldId); 
+                    if(idx > -1) homeBlocks[idx] = data; 
+                } else { 
+                    if(homeBlocks.find(b => b.id === newId)) return alert('Блок з таким ID вже існує'); 
+                    homeBlocks.push(data); 
+                }
+                
+                API.set('bv_home_blocks', homeBlocks); 
+                renderBlocksAdmin(); 
+                window.closeBlockModal(); 
+                window.showNotification('Блок збережено');
             };
         }
 

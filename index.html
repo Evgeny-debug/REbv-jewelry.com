@@ -67,55 +67,24 @@
         </section>
 
         <div id="dynamicHomeBlocksContainer"></div>
-        
-        <section class="container-wide py-8" id="categories-section">
-            <div class="text-center mb-6 md:mb-12 mt-4">
+
+        <section class="container-wide py-12">
+            <h2 class="section-title text-center mb-8" data-i18n="new_arrivals">Новинки</h2>
+            <div id="homeProductsGrid" class="premium-carousel-track flex gap-4 overflow-x-auto snap-x">
+            </div>
+        </section>
+
+
+        <section class="container-wide py-4" id="categories-section">
+            <div class="text-center mb-4 mt-2">
                 <h3 class="section-subtitle">Our World</h3>
                 <h2 class="section-title" data-i18n="m2">Каталог</h2>
             </div>
-            <div class="glass-accordion-container" id="glassAccordion">
-                <div class="glass-panel-item group active rounded-none" onclick="window.toggleAccordionPanel(this)">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800" alt="Каблучки" class="panel-bg">
-                    <div class="panel-overlay"></div>
-                    <div class="panel-content">
-                        <h3 class="panel-title">Каблучки</h3>
-                        <div class="panel-hidden-content">
-                            <a href="catalog.html#rings" class="panel-btn">Всі каблучки &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
-                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800" alt="Сережки" class="panel-bg">
-                    <div class="panel-overlay"></div>
-                    <div class="panel-content">
-                        <h3 class="panel-title">Сережки</h3>
-                        <div class="panel-hidden-content">
-                            <a href="catalog.html#earrings" class="panel-btn">Всі сережки &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
-                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800" alt="Ланцюжки" class="panel-bg">
-                    <div class="panel-overlay"></div>
-                    <div class="panel-content">
-                        <h3 class="panel-title">Ланцюжки</h3>
-                        <div class="panel-hidden-content">
-                            <a href="catalog.html#necklaces" class="panel-btn">Всі ланцюжки &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-panel-item group rounded-none" onclick="window.toggleAccordionPanel(this)">
-                    <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=800" alt="Браслети" class="panel-bg">
-                    <div class="panel-overlay"></div>
-                    <div class="panel-content">
-                        <h3 class="panel-title">Браслети</h3>
-                        <div class="panel-hidden-content">
-                            <a href="catalog.html#bracelets" class="panel-btn">Всі браслети &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="dynamicCategoriesContainer" class="w-full px-0"></div>
         </section>
+
+        
+
     </main>
 
     <div id="footer-placeholder"></div>

@@ -272,18 +272,41 @@
     </div>
 
     <div id="blockModal" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center hidden opacity-0 transition-opacity p-4">
-        <div class="glass-panel p-6 w-full max-w-sm">
-            <h3 class="text-lg font-semibold mb-4" id="blockModalTitle">Блок на Головній</h3>
+        <div class="glass-panel p-6 w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h3 class="text-lg font-serif text-[#c5a059] mb-4" id="blockModalTitle">Блок на Головній</h3>
             <form id="blockForm" class="flex flex-col gap-4">
                 <input type="hidden" id="block-old-id">
-                <div><label class="text-[10px] uppercase text-gray-400 block mb-1">ID (Англ, напр: hits)</label><input type="text" id="block-id" class="input-field" required pattern="[a-zA-Z0-9_-]+"></div>
-                <div class="grid grid-cols-3 gap-2">
+                <div>
+                    <label class="text-[10px] uppercase font-bold text-[#c5a059] block mb-1">ID (Напр: winter_sale)</label>
+                    <input type="text" id="block-id" class="input-field border-[#c5a059]/50" required pattern="[a-zA-Z0-9_-]+">
+                </div>
+                
+                <div class="grid grid-cols-1 gap-3 border-t border-white/10 pt-3">
                     <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок UA</label><input type="text" id="block-name-uk" class="input-field" required></div>
                     <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок RU</label><input type="text" id="block-name-ru" class="input-field" required></div>
                     <div><label class="text-[10px] uppercase text-gray-400 block mb-1">Заголовок EN</label><input type="text" id="block-name-en" class="input-field" required></div>
                 </div>
-                <div class="flex items-center gap-2"><input type="checkbox" id="block-active" class="w-4 h-4 accent-[#c5a059]"><label class="text-sm">Показувати на сайті</label></div>
-                <div class="flex gap-3 mt-2"><button type="button" onclick="window.closeBlockModal()" class="flex-1 btn-secondary py-2 text-sm">Скасувати</button><button type="submit" class="flex-1 btn-primary py-2 text-sm">Зберегти</button></div>
+
+                <div class="bg-white/5 p-4 rounded-lg border border-[#c5a059]/30 mt-2">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-[#c5a059] block mb-2">Фонове фото (Стиль "Золотой Век")</label>
+                    <p class="text-[10px] text-gray-400 mb-2">Залиште пустим для стандартного білого/чорного фону. Рекомендовано темні фото для контрасту.</p>
+                    <input type="file" accept="image/png, image/jpeg, image/webp" class="input-field file-input bg-[#1a1a1a]" onchange="window.handleImageUpload(event, 'blockBgPreview', 'block-bg-img')">
+                    <input type="hidden" id="block-bg-img">
+                    <div class="relative mt-2">
+                        <img id="blockBgPreview" class="w-full aspect-[21/9] object-cover rounded hidden border border-white/20">
+                        <button type="button" onclick="document.getElementById('block-bg-img').value=''; document.getElementById('blockBgPreview').classList.add('hidden');" class="absolute top-1 right-1 bg-red-500 text-white w-5 h-5 rounded-full flex justify-center items-center text-xs opacity-0 hover:opacity-100 transition-opacity" id="blockBgClearBtn">&times;</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mt-2 bg-black/20 p-3 rounded">
+                    <input type="checkbox" id="block-active" class="w-4 h-4 accent-[#c5a059]">
+                    <label class="text-sm font-medium">Показувати блок на сайті</label>
+                </div>
+                
+                <div class="flex gap-3 mt-4">
+                    <button type="button" onclick="window.closeBlockModal()" class="flex-1 btn-secondary py-3 text-sm">Скасувати</button>
+                    <button type="submit" class="flex-1 btn-primary py-3 text-sm tracking-widest uppercase">Зберегти</button>
+                </div>
             </form>
         </div>
     </div>

@@ -1840,3 +1840,19 @@ aside.custom-scrollbar {
         gap: 1.5rem;
     }
 }
+/* ==========================================
+   LUXURY BRUTALISM: Жодкої круглості
+========================================= */
+* {
+    border-radius: 0 !important;
+}
+
+/* Прибираємо заокруглення навіть у системних модалок та шторок */
+#mobileFilterDrawer, #cartDrawer, #favDrawer, #sideMenu, .glass-panel {
+    border-radius: 0 !important;
+}
+
+/* Робимо рамки карток тоншими, щоб при злипанні вони не були занадто жирними */
+.product-card, .group {
+    border-width: 0.5px !important;
+}
